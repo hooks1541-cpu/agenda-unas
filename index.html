@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#d63384">
+    <title>💅 Agenda de Uñas</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #ffe4f1 0%, #ffcce0 100%);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .header {
+            background: #d63384;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            margin: 15px;
+            padding: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #666;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .nav-tab.active {
+            background: #d63384;
+            color: white;
+        }
+        
+        .content {
+            padding: 0 15px;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 0.95rem;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            -webkit-appearance: none;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d63384;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #d63384 0%, #b52a6f 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            accent-color: #d63384;
+        }
+        
+        .turno-card {
+            background: white;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #d63384;
+        }
+        
+        .turno-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .turno-cliente {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .turno-id {
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .turno-info {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+        
+        .turno-precio {
+            display: flex;
+            gap: 15px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+        
+        .precio-item {
+            text-align: center;
+        }
+        
+        .precio-label {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+        }
+        
+        .precio-valor {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .precio-total {
+            color: #d63384;
+        }
+        
+        .precio-sena {
+            color: #28a745;
+        }
+        
+        .precio-saldo {
+            color: #fd7e14;
+        }
+        
+        .filtros {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        
+        .filtro-btn {
+            padding: 10px 18px;
+            border: 2px solid #d63384;
+            background: white;
+            color: #d63384;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+        
+        .filtro-btn.active {
+            background: #d63384;
+            color: white;
+        }
+        
+        .resumen {
+            background: linear-gradient(135deg, #d63384 0%, #b52a6f 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .resumen-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .resumen-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .resumen-item p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .modal-text {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+        
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💅 Agenda de Uñas</h1>
+    </div>
+    
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="showSection('agendar')">📅 Agendar</button>
+        <button class="nav-tab" onclick="showSection('turnos')">📋 Turnos</button>
+        <button class="nav-tab" onclick="showSection('buscar')">🔍 Buscar</button>
+    </div>
+    
+    <div class="content">
+        <!-- Sección Agendar -->
+        <div id="section-agendar" class="section active">
+            <div class="card">
+                <div class="form-group">
+                    <label>👤 Nombre del Cliente</label>
+                    <input type="text" id="cliente" placeholder="Ej: María González">
+                </div>
+                
+                <div class="form-group">
+                    <label>📅 Día</label>
+                    <select id="dia"></select>
+                </div>
+                
+                <div class="form-group">
+                    <label>🕐 Hora</label>
+                    <select id="hora"></select>
+                </div>
+                
+                <div class="form-group">
+                    <label>💅 Servicio</label>
+                    <select id="servicio" onchange="toggleOtroServicio()">
+                        <option value="Esmaltado semipermanente">Esmaltado semipermanente</option>
+                        <option value="Kapping gel">Kapping gel</option>
+                        <option value="Soft gel">Soft gel</option>
+                        <option value="Uñas esculpidas">Uñas esculpidas</option>
+                        <option value="Nail art">Nail art</option>
+                        <option value="Retiro de producto">Retiro de producto</option>
+                        <option value="Manicure básica">Manicure básica</option>
+                        <option value="Pedicure">Pedicure</option>
+                        <option value="Otro">Otro (especificar)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group hidden" id="otro-servicio-group">
+                    <label>✏️ Especificar servicio</label>
+                    <input type="text" id="otro-servicio" placeholder="Describe el servicio">
+                </div>
+                
+                <div class="form-group">
+                    <label>💰 Precio (múltiplo de $500)</label>
+                    <input type="number" id="precio" placeholder="Ej: 2500" step="500">
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="tiene-sena" onchange="toggleSena()">
+                    <label for="tiene-sena" style="margin: 0;">💵 ¿Tiene seña pagada?</label>
+                </div>
+                
+                <div id="sena-group" class="hidden">
+                    <div class="form-group">
+                        <label>Monto de la seña ($500 en $500)</label>
+                        <input type="number" id="monto-sena" placeholder="Ej: 500" step="500">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>👤 ¿Quién pagó la seña?</label>
+                        <input type="text" id="quien-pago" placeholder="Nombre de quien pagó">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="guardarTurno()">
+                    💾 GUARDAR TURNO
+                </button>
+            </div>
+        </div>
+        
+        <!-- Sección Turnos -->
+        <div id="section-turnos" class="section">
+            <div class="resumen">
+                <div class="resumen-grid">
+                    <div class="resumen-item">
+                        <h3 id="resumen-total">0</h3>
+                        <p>Turnos</p>
+                    </div>
+                    <div class="resumen-item">
+                        <h3 id="resumen-precios">$0</h3>
+                        <p>Precios</p>
+                    </div>
+                    <div class="resumen-item">
+                        <h3 id="resumen-senas">$0</h3>
+                        <p>Señas</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filtros">
+                <button class="filtro-btn active" onclick="filtrarTurnos('Todos')">Todos</button>
+                <button class="filtro-btn" onclick="filtrarTurnos('Lunes')">Lun</button>
+                <button class="filtro-btn" onclick="filtrarTurnos('Martes')">Mar</button>
+                <button class="filtro-btn" onclick="filtrarTurnos('Miércoles')">Mié</button>
+                <button class="filtro-btn" onclick="filtrarTurnos('Jueves')">Jue</button>
+                <button class="filtro-btn" onclick="filtrarTurnos('Viernes')">Vie</button>
+                <button class="filtro-btn" onclick="filtrarTurnos('Sábado')">Sáb</button>
+            </div>
+            
+            <div id="lista-turnos"></div>
+        </div>
+        
+        <!-- Sección Buscar -->
+        <div id="section-buscar" class="section">
+            <div class="card">
+                <div class="search-box">
+                    <input type="text" id="buscar-input" placeholder="Nombre del cliente...">
+                    <button class="btn btn-secondary" onclick="buscarTurnos()" style="width: auto; padding: 14px 20px;">
+                        🔍
+                    </button>
+                </div>
+                <div id="resultados-busqueda"></div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 15px; color: #333;">❌ Cancelar Turno</h3>
+                <div class="form-group">
+                    <label>ID del turno a cancelar</label>
+                    <input type="number" id="cancelar-id" placeholder="Número de ID">
+                </div>
+                <button class="btn btn-danger" onclick="mostrarModalCancelar()">
+                    CANCELAR TURNO
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Confirmación -->
+    <div class="modal" id="modal-confirmar">
+        <div class="modal-content">
+            <div class="modal-title">¿Cancelar turno?</div>
+            <div class="modal-text" id="modal-texto"></div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="cerrarModal()">No</button>
+                <button class="btn btn-danger" onclick="confirmarCancelar()">Sí, cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        // Configuración
+        const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const HORARIOS = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30',
+                         '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30'];
+        
+        let turnos = JSON.parse(localStorage.getItem('turnos')) || [];
+        let filtroActual = 'Todos';
+        let idCancelar = null;
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarSelectDias();
+            actualizarSelectHoras();
+        });
+        
+        // Navegación
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById('section-' + section).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (section === 'turnos') {
+                renderizarTurnos();
+            }
+        }
+        
+        // Cargar selects
+        function cargarSelectDias() {
+            const select = document.getElementById('dia');
+            DIAS.forEach(dia => {
+                const option = document.createElement('option');
+                option.value = dia;
+                option.textContent = dia;
+                select.appendChild(option);
+            });
+            select.addEventListener('change', actualizarSelectHoras);
+        }
+        
+        function actualizarSelectHoras() {
+            const dia = document.getElementById('dia').value;
+            const select = document.getElementById('hora');
+            select.innerHTML = '';
+            
+            const ocupados = turnos.filter(t => t.dia === dia).map(t => t.hora);
+            const disponibles = HORARIOS.filter(h => !ocupados.includes(h));
+            
+            if (disponibles.length === 0) {
+                const option = document.createElement('option');
+                option.textContent = 'No hay horarios disponibles';
+                select.appendChild(option);
+                return;
+            }
+            
+            disponibles.forEach(hora => {
+                const option = document.createElement('option');
+                option.value = hora;
+                option.textContent = hora;
+                select.appendChild(option);
+            });
+        }
+        
+        // Toggle campos
+        function toggleOtroServicio() {
+            const servicio = document.getElementById('servicio').value;
+            const group = document.getElementById('otro-servicio-group');
+            if (servicio === 'Otro') {
+                group.classList.remove('hidden');
+            } else {
+                group.classList.add('hidden');
+            }
+        }
+        
+        function toggleSena() {
+            const checked = document.getElementById('tiene-sena').checked;
+            const group = document.getElementById('sena-group');
+            if (checked) {
+                group.classList.remove('hidden');
+            } else {
+                group.classList.add('hidden');
+            }
+        }
+        
+        // Validaciones
+        function validarPrecio(precio) {
+            precio = parseInt(precio);
+            if (isNaN(precio) || precio <= 0) return { valido: false, error: 'El precio debe ser mayor a 0' };
+            if (precio % 500 !== 0) return { valido: false, error: 'El precio debe ser múltiplo de $500' };
+            return { valido: true, valor: precio };
+        }
+        
+        function validarSena(sena, precio) {
+            sena = parseInt(sena) || 0;
+            if (sena === 0) return { valido: true, valor: 0 };
+            if (sena % 500 !== 0) return { valido: false, error: 'La seña debe ser múltiplo de $500' };
+            if (sena > precio) return { valido: false, error: 'La seña no puede ser mayor al precio' };
+            return { valido: true, valor: sena };
+        }
+        
+        // Guardar turno
+        function guardarTurno() {
+            const cliente = document.getElementById('cliente').value.trim();
+            if (!cliente) {
+                mostrarToast('❌ Ingresa el nombre del cliente');
+                return;
+            }
+            
+            const dia = document.getElementById('dia').value;
+            const hora = document.getElementById('hora').value;
+            
+            if (hora.includes('No hay')) {
+                mostrarToast('❌ No hay horarios disponibles');
+                return;
+            }
+            
+            let servicio = document.getElementById('servicio').value;
+            if (servicio === 'Otro') {
+                servicio = document.getElementById('otro-servicio').value.trim();
+                if (!servicio) {
+                    mostrarToast('❌ Especifica el servicio');
+                    return;
+                }
+            }
+            
+            const valPrecio = validarPrecio(document.getElementById('precio').value);
+            if (!valPrecio.valido) {
+                mostrarToast('❌ ' + valPrecio.error);
+                return;
+            }
+            const precio = valPrecio.valor;
+            
+            let sena = 0;
+            let quienPago = '';
+            
+            if (document.getElementById('tiene-sena').checked) {
+                const valSena = validarSena(document.getElementById('monto-sena').value, precio);
+                if (!valSena.valido) {
+                    mostrarToast('❌ ' + valSena.error);
+                    return;
+                }
+                sena = valSena.valor;
+                quienPago = document.getElementById('quien-pago').value.trim() || cliente;
+            }
+            
+            const turno = {
+                id: generarId(),
+                cliente,
+                dia,
+                hora,
+                servicio,
+                precio,
+                sena,
+                quienPago,
+                saldo: precio - sena,
+                fechaCreacion: new Date().toISOString()
+            };
+            
+            turnos.push(turno);
+            localStorage.setItem('turnos', JSON.stringify(turnos));
+            
+            // Limpiar formulario
+            document.getElementById('cliente').value = '';
+            document.getElementById('precio').value = '';
+            document.getElementById('otro-servicio').value = '';
+            document.getElementById('monto-sena').value = '';
+            document.getElementById('quien-pago').value = '';
+            document.getElementById('tiene-sena').checked = false;
+            toggleSena();
+            
+            actualizarSelectHoras();
+            mostrarToast('✅ Turno guardado exitosamente');
+        }
+        
+        function generarId() {
+            if (turnos.length === 0) return 1;
+            return Math.max(...turnos.map(t => t.id)) + 1;
+        }
+        
+        // Renderizar turnos
+        function renderizarTurnos() {
+            const container = document.getElementById('lista-turnos');
+            let turnosMostrar = turnos;
+            
+            if (filtroActual !== 'Todos') {
+                turnosMostrar = turnos.filter(t => t.dia === filtroActual);
+            }
+            
+            // Ordenar
+            const ordenDias = { 'Lunes': 0, 'Martes': 1, 'Miércoles': 2, 'Jueves': 3, 'Viernes': 4, 'Sábado': 5 };
+            turnosMostrar.sort((a, b) => {
+                if (ordenDias[a.dia] !== ordenDias[b.dia]) {
+                    return ordenDias[a.dia] - ordenDias[b.dia];
+                }
+                return a.hora.localeCompare(b.hora);
+            });
+            
+            // Actualizar resumen
+            const totalPrecios = turnosMostrar.reduce((sum, t) => sum + t.precio, 0);
+            const totalSenas = turnosMostrar.reduce((sum, t) => sum + t.sena, 0);
+            
+            document.getElementById('resumen-total').textContent = turnosMostrar.length;
+            document.getElementById('resumen-precios').textContent = '$' + totalPrecios.toLocaleString();
+            document.getElementById('resumen-senas').textContent = '$' + totalSenas.toLocaleString();
+            
+            // Renderizar
+            if (turnosMostrar.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>No hay turnos ${filtroActual !== 'Todos' ? 'para ' + filtroActual : ''}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = turnosMostrar.map(t => `
+                <div class="turno-card">
+                    <div class="turno-header">
+                        <span class="turno-cliente">${t.cliente}</span>
+                        <span class="turno-id">#${t.id}</span>
+                    </div>
+                    <div class="turno-info">📅 ${t.dia} a las ${t.hora}</div>
+                    <div class="turno-info">💅 ${t.servicio}</div>
+                    ${t.sena > 0 ? `<div class="turno-info">👤 Seña pagada por: ${t.quienPago}</div>` : ''}
+                    <div class="turno-precio">
+                        <div class="precio-item">
+                            <div class="precio-label">Precio</div>
+                            <div class="precio-valor precio-total">$${t.precio.toLocaleString()}</div>
+                        </div>
+                        <div class="precio-item">
+                            <div class="precio-label">Seña</div>
+                            <div class="precio-valor precio-sena">$${t.sena.toLocaleString()}</div>
+                        </div>
+                        <div class="precio-item">
+                            <div class="precio-label">Saldo</div>
+                            <div class="precio-valor precio-saldo">$${t.saldo.toLocaleString()}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function filtrarTurnos(dia) {
+            filtroActual = dia;
+            document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderizarTurnos();
+        }
+        
+        // Buscar
+        function buscarTurnos() {
+            const busqueda = document.getElementById('buscar-input').value.trim().toLowerCase();
+            const container = document.getElementById('resultados-busqueda');
+            
+            if (!busqueda) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            const resultados = turnos.filter(t => t.cliente.toLowerCase().includes(busqueda));
+            
+            if (resultados.length === 0) {
+                container.innerHTML = '<p style="color: #999; text-align: center;">No se encontraron resultados</p>';
+                return;
+            }
+            
+            container.innerHTML = resultados.map(t => `
+                <div class="turno-card">
+                    <div class="turno-header">
+                        <span class="turno-cliente">${t.cliente}</span>
+                        <span class="turno-id">#${t.id}</span>
+                    </div>
+                    <div class="turno-info">📅 ${t.dia} a las ${t.hora}</div>
+                    <div class="turno-info">💅 ${t.servicio}</div>
+                    <div class="turno-precio">
+                        <div class="precio-item">
+                            <div class="precio-label">Precio</div>
+                            <div class="precio-valor precio-total">$${t.precio.toLocaleString()}</div>
+                        </div>
+                        <div class="precio-item">
+                            <div class="precio-label">Seña</div>
+                            <div class="precio-valor precio-sena">$${t.sena.toLocaleString()}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Cancelar
+        function mostrarModalCancelar() {
+            const id = parseInt(document.getElementById('cancelar-id').value);
+            if (!id) {
+                mostrarToast('❌ Ingresa un ID válido');
+                return;
+            }
+            
+            const turno = turnos.find(t => t.id === id);
+            if (!turno) {
+                mostrarToast('❌ No se encontró turno con ese ID');
+                return;
+            }
+            
+            idCancelar = id;
+            document.getElementById('modal-texto').textContent = 
+                `¿Cancelar el turno de ${turno.cliente} el ${turno.dia} a las ${turno.hora}?`;
+            document.getElementById('modal-confirmar').classList.add('active');
+        }
+        
+        function cerrarModal() {
+            document.getElementById('modal-confirmar').classList.remove('active');
+            idCancelar = null;
+        }
+        
+        function confirmarCancelar() {
+            if (!idCancelar) return;
+            
+            turnos = turnos.filter(t => t.id !== idCancelar);
+            localStorage.setItem('turnos', JSON.stringify(turnos));
+            
+            document.getElementById('cancelar-id').value = '';
+            cerrarModal();
+            mostrarToast('✅ Turno cancelado');
+            actualizarSelectHoras();
+        }
+        
+        // Toast
+        function mostrarToast(mensaje) {
+            const toast = document.getElementById('toast');
+            toast.textContent = mensaje;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
