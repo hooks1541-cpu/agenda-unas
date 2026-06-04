@@ -1636,10 +1636,10 @@
                     <div style="display: flex; gap: 10px;">
                         ${t.estado === 'pendiente' ? `
                             <button class="btn btn-success" style="flex: 1; padding: 10px; font-size: 0.9rem;" 
-                                onclick="marcarPagado(${t.id})">✓ Marcar pagado</button>
+                                onclick="marcarPagado('${t.id}')">✓ Marcar pagado</button>
                         ` : ''}
                         <button class="btn btn-danger" style="flex: 1; padding: 10px; font-size: 0.9rem;" 
-                            onclick="eliminarTurno(${t.id})">🗑 Eliminar</button>
+                            onclick="eliminarTurno('${t.id}')">🗑 Eliminar</button>
                     </div>
                 </div>
             `).join('');
@@ -1668,6 +1668,7 @@
         }
         
         async function marcarPagado(id) {
+            console.log('Marcando como pagado:', id);
             const resultado = await actualizarTurnoEnFirebase(id, { estado: 'pagado' });
             if (resultado) {
                 mostrarToast('✅ Turno marcado como pagado');
@@ -1677,6 +1678,7 @@
         }
         
         async function eliminarTurno(id) {
+            console.log('Eliminando turno:', id);
             if (confirm('¿Eliminar este turno?')) {
                 const resultado = await eliminarTurnoDeFirebase(id);
                 if (resultado) {
