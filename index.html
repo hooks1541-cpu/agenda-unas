@@ -108,18 +108,6 @@
             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
         }
         
-        .btn-mercadopago {
-            background: linear-gradient(135deg, #009ee3 0%, #0077b3 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 158, 227, 0.4);
-        }
-        
-        .btn-uala {
-            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
-        }
-        
         .form-group {
             margin-bottom: 20px;
         }
@@ -799,14 +787,6 @@
                     ¿Ya realizaste el pago?
                 </p>
                 
-                <button class="btn btn-mercadopago" onclick="abrirMercadoPago()">
-                    📲 Abrir Mercado Pago
-                </button>
-                
-                <button class="btn btn-uala" onclick="abrirUala()">
-                    💳 Abrir Ualá
-                </button>
-                
                 <button class="btn btn-success" onclick="confirmarReserva()">
                     ✅ Ya pagué, confirmar turno
                 </button>
@@ -1009,13 +989,38 @@
             document.getElementById('fecha-section').classList.remove('hidden');
             
             // Configurar fecha mínima (hoy)
-            const hoy = new Date().toISOString().split('T')[0];
-            document.getElementById('fecha-turno').min = hoy;
+            const hoy = new Date();
+            const fechaMinima = hoy.toISOString().split('T')[0];
+            const inputFecha = document.getElementById('fecha-turno');
+            inputFecha.min = fechaMinima;
+            inputFecha.value = '';
+            
+            // Agregar listener para validar que sea el día correcto
+            inputFecha.onchange = function() {
+                validarFechaDia(this.value, dia);
+            };
+        }
+        
+        function validarFechaDia(fecha, diaEsperado) {
+            if (!fecha) return;
+            
+            const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const fechaSeleccionada = new Date(fecha + 'T00:00:00');
+            const diaSemana = diasSemana[fechaSeleccionada.getDay()];
+            
+            if (diaSemana !== diaEsperado) {
+                mostrarToast(`❌ La fecha seleccionada es ${diaSemana}, no ${diaEsperado}. Seleccioná un ${diaEsperado}.`);
+                document.getElementById('fecha-turno').value = '';
+                document.getElementById('horarios-section').classList.add('hidden');
+                document.getElementById('btn-continuar-paso3').disabled = true;
+                return false;
+            }
+            
+            seleccionarFecha(fecha);
+            return true;
         }
         
         function seleccionarFecha(fecha) {
-            if (!fecha) return;
-            
             reservaActual.fecha = fecha;
             
             // Mostrar horarios
@@ -1070,18 +1075,6 @@
             navigator.clipboard.writeText(ALIAS_MP).then(() => {
                 mostrarToast('✅ Alias copiado: ' + ALIAS_MP);
             });
-        }
-        
-        function abrirMercadoPago() {
-            const url = `https://www.mercadopago.com.ar/p2p/transferencias/?alias=${ALIAS_MP}&amount=${SENA}`;
-            window.open(url, '_blank');
-        }
-        
-        function abrirUala() {
-            mostrarToast('💳 Buscá el alias: ' + ALIAS_MP + ' en Ualá');
-            setTimeout(() => {
-                window.open('uala://', '_blank');
-            }, 1000);
         }
         
         function confirmarReserva() {
