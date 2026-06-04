@@ -9,6 +9,7 @@
     <title>💅 Lunne Nails - Reserva tu Turno</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -884,6 +885,16 @@
         const NOMBRE_TITULAR = 'Ailen Nicole Aristule';
         const SENA = 5000;
         
+        // EmailJS Config
+        const EMAILJS_CONFIG = {
+            publicKey: 'XVEWeCHL0c3Z2TNvx',
+            serviceId: 'service_80lxgaa',
+            templateId: 'template_kxa01yq'
+        };
+        
+        // Inicializar EmailJS
+        emailjs.init(EMAILJS_CONFIG.publicKey);
+        
         // Datos
         let turnos = JSON.parse(localStorage.getItem('turnosAilen')) || [];
         let reservaActual = {};
@@ -1130,6 +1141,9 @@
             turnos.push(turno);
             localStorage.setItem('turnosAilen', JSON.stringify(turnos));
             
+            // Enviar email de notificación
+            enviarEmailNuevaReserva(turno);
+            
             document.getElementById('confirmacion-detalles').innerHTML = `
                 <strong>${turno.servicio}</strong><br>
                 ${turno.dia} ${turno.fecha} a las ${turno.hora}<br>
@@ -1149,6 +1163,26 @@
             document.getElementById('horarios-section').classList.add('hidden');
             document.getElementById('btn-continuar-paso3').disabled = true;
             reservaActual.servicios = [];
+        }
+        
+        function enviarEmailNuevaReserva(turno) {
+            const templateParams = {
+                cliente: turno.cliente,
+                telefono: turno.telefono,
+                servicio: turno.servicio,
+                precio: '$' + turno.precio.toLocaleString(),
+                dia: turno.dia,
+                fecha: turno.fecha,
+                hora: turno.hora
+            };
+            
+            emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams)
+                .then(() => {
+                    console.log('Email enviado exitosamente');
+                })
+                .catch((error) => {
+                    console.error('Error al enviar email:', error);
+                });
         }
         
         function generarId() {
