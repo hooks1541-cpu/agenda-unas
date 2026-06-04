@@ -5,7 +5,7 @@ Sistema de agenda de turnos para negocio de uñas.
 ## Características
 
 - 📅 Agendar turnos (Lunes a Sábado)
-- 💰 Precios en múltiplos de $500 ARS
+- 💰 Precios en múltiplos $
 - 💵 Registro de señas pagadas
 - 📋 Listado de turnos con filtros
 - 🔍 Búsqueda por cliente
