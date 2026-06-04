@@ -928,6 +928,12 @@
                     <div class="servicio-precio">$18.000</div>
                 </div>
                 
+                <div class="servicio-card" onclick="seleccionarServicio('Chismear 😂', 0)" style="border: 3px dashed #FF1744; background: linear-gradient(135deg, #FFE5E5 0%, #FFCDD2 100%);">
+                    <div class="servicio-nombre" style="color: #D32F2F; font-size: 1.2rem;">Chismear 😂</div>
+                    <div class="servicio-precio" style="color: #D32F2F; font-size: 1.5rem; font-weight: 800;">GRATIS</div>
+                    <p style="font-size: 0.8rem; color: #D32F2F; margin-top: 5px; font-style: italic;">¡Hablar no cuesta nada!</p>
+                </div>
+                
                 <button class="btn btn-primary" onclick="continuarASeleccionarDia()" style="margin-top: 20px;">
                     Continuar →
                 </button>
@@ -1340,6 +1346,15 @@
                 mostrarToast('❌ Seleccioná al menos un servicio');
                 return;
             }
+            
+            // Verificar que no se haya seleccionado SOLO "Chismear"
+            const soloChismear = reservaActual.servicios.length === 1 && reservaActual.servicios[0].nombre === 'Chismear 😂';
+            
+            if (soloChismear) {
+                mostrarToast('😂 Chismear es gratuito pero tenés que seleccionar otro servicio también!');
+                return;
+            }
+            
             irPaso3();
         }
         
