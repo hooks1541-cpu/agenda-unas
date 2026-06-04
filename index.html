@@ -1574,6 +1574,17 @@
         
         // Verificar cierres de local
         verificarCierreLocal();
+        
+        // Auto-refresh del panel admin cada 15 segundos
+        setInterval(() => {
+            const adminPanel = document.getElementById('pantalla-admin');
+            if (adminPanel && adminPanel.classList.contains('active')) {
+                // Recargar turnos desde localStorage
+                turnos = JSON.parse(localStorage.getItem('turnosAilen')) || [];
+                renderizarAdminTurnos();
+                actualizarResumenAdmin();
+            }
+        }, 15000);
     </script>
 </body>
 </html>
