@@ -10,12 +10,11 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        // Your web app's Firebase configuration
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script>
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCqJIp5QvxS39EhNVkb4balJ8UbGvnGZms",
             authDomain: "lunne-nails-agenda.firebaseapp.com",
@@ -26,19 +25,13 @@
         };
 
         // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
         
-        // Exportar para usar en el script principal
+        // Make available globally
         window.firebaseDB = db;
-        window.firebaseCollection = collection;
-        window.firebaseAddDoc = addDoc;
-        window.firebaseOnSnapshot = onSnapshot;
-        window.firebaseQuery = query;
-        window.firebaseOrderBy = orderBy;
-        window.firebaseDeleteDoc = deleteDoc;
-        window.firebaseDoc = doc;
-        window.firebaseUpdateDoc = updateDoc;
+        window.firebaseReady = true;
+        console.log('Firebase inicializado correctamente');
     </script>
     <style>
         * {
@@ -963,40 +956,59 @@
         
         // Función para cargar turnos desde Firebase
         function cargarTurnosDesdeFirebase() {
-            const db = window.firebaseDB;
-            const collection = window.firebaseCollection;
-            const query = window.firebaseQuery;
-            const orderBy = window.firebaseOrderBy;
-            const onSnapshot = window.firebaseOnSnapshot;
-            
-            const q = query(collection(db, 'turnos'), orderBy('fechaCreacion', 'desc'));
-            
-            unsubscribeTurnos = onSnapshot(q, (snapshot) => {
-                turnos = [];
-                snapshot.forEach((doc) => {
-                    turnos.push({ id: doc.id, ...doc.data() });
-                });
+            try {
+                const db = window.firebaseDB;
                 
-                // Si estamos en el panel admin, actualizar la vista
-                const adminPanel = document.getElementById('pantalla-admin');
-                if (adminPanel && adminPanel.classList.contains('active')) {
-                    renderizarAdminTurnos();
-                    actualizarResumenAdmin();
+                if (!db) {
+                    console.error('Firebase no está inicializado');
+                    mostrarToast('❌ Error de conexión con la base de datos');
+                    return;
                 }
-            });
+                
+                // Usar la API compatible
+                db.collection('turnos')
+                    .orderBy('fechaCreacion', 'desc')
+                    .onSnapshot((snapshot) => {
+                        turnos = [];
+                        snapshot.forEach((doc) => {
+                            turnos.push({ id: doc.id, ...doc.data() });
+                        });
+                        
+                        console.log('Turnos cargados:', turnos.length);
+                        
+                        // Si estamos en el panel admin, actualizar la vista
+                        const adminPanel = document.getElementById('pantalla-admin');
+                        if (adminPanel && adminPanel.classList.contains('active')) {
+                            renderizarAdminTurnos();
+                            actualizarResumenAdmin();
+                        }
+                    }, (error) => {
+                        console.error('Error al cargar turnos:', error);
+                        mostrarToast('❌ Error al cargar turnos: ' + error.message);
+                    });
+                    
+            } catch (error) {
+                console.error('Error en cargarTurnosDesdeFirebase:', error);
+                mostrarToast('❌ Error de conexión');
+            }
         }
         
         // Función para guardar turno en Firebase
         async function guardarTurnoEnFirebase(turno) {
             try {
                 const db = window.firebaseDB;
-                const collection = window.firebaseCollection;
-                const addDoc = window.firebaseAddDoc;
                 
-                await addDoc(collection(db, 'turnos'), turno);
+                if (!db) {
+                    console.error('Firebase DB no disponible');
+                    return false;
+                }
+                
+                const docRef = await db.collection('turnos').add(turno);
+                console.log('Turno guardado con ID:', docRef.id);
                 return true;
             } catch (error) {
                 console.error('Error al guardar turno:', error);
+                mostrarToast('❌ Error al guardar: ' + error.message);
                 return false;
             }
         }
@@ -1005,13 +1017,17 @@
         async function eliminarTurnoDeFirebase(id) {
             try {
                 const db = window.firebaseDB;
-                const deleteDoc = window.firebaseDeleteDoc;
-                const doc = window.firebaseDoc;
                 
-                await deleteDoc(doc(db, 'turnos', id));
+                if (!db) {
+                    console.error('Firebase DB no disponible');
+                    return false;
+                }
+                
+                await db.collection('turnos').doc(id).delete();
                 return true;
             } catch (error) {
                 console.error('Error al eliminar turno:', error);
+                mostrarToast('❌ Error al eliminar: ' + error.message);
                 return false;
             }
         }
@@ -1020,13 +1036,17 @@
         async function actualizarTurnoEnFirebase(id, datos) {
             try {
                 const db = window.firebaseDB;
-                const updateDoc = window.firebaseUpdateDoc;
-                const doc = window.firebaseDoc;
                 
-                await updateDoc(doc(db, 'turnos', id), datos);
+                if (!db) {
+                    console.error('Firebase DB no disponible');
+                    return false;
+                }
+                
+                await db.collection('turnos').doc(id).update(datos);
                 return true;
             } catch (error) {
                 console.error('Error al actualizar turno:', error);
+                mostrarToast('❌ Error al actualizar: ' + error.message);
                 return false;
             }
         }
@@ -1284,6 +1304,12 @@
         }
         
         async function confirmarReserva() {
+            // Verificar que Firebase esté listo
+            if (!window.firebaseDB) {
+                mostrarToast('❌ Error: Base de datos no disponible. Recargá la página.');
+                return;
+            }
+            
             const turno = {
                 cliente: reservaActual.nombre,
                 telefono: reservaActual.telefono,
@@ -1672,8 +1698,20 @@
         // Inicializar
         cargarHorariosGuardados();
         
-        // Cargar turnos desde Firebase
-        cargarTurnosDesdeFirebase();
+        // Esperar a que Firebase esté listo antes de cargar turnos
+        function esperarFirebase() {
+            if (window.firebaseReady && window.firebaseDB) {
+                console.log('Firebase listo, cargando turnos...');
+                cargarTurnosDesdeFirebase();
+            } else if (window.firebaseReady === false) {
+                console.error('Firebase falló al inicializar');
+                mostrarToast('❌ Error de conexión con la base de datos');
+            } else {
+                console.log('Esperando Firebase...');
+                setTimeout(esperarFirebase, 500);
+            }
+        }
+        esperarFirebase();
         
         // Verificar si hay sesión de admin activa
         checkAdminSession();
