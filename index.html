@@ -162,6 +162,23 @@
         .servicio-card.selected {
             background: #ffe4f1;
             border-color: #d63384;
+            position: relative;
+        }
+        
+        .servicio-card.selected::after {
+            content: "✓";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #d63384;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
         
         .servicio-nombre {
@@ -531,14 +548,13 @@
         <div id="pantalla-login" class="section">
             <div class="card">
                 <button class="back-btn" onclick="volverInicio()">← Volver</button>
-                <h2 class="welcome-title">Acceso Admin</h2>
+                <h2 class="welcome-title">🔐 Acceso Administrador</h2>
+                <p class="welcome-text">Ingresá tus credenciales para acceder al panel</p>
                 <div class="form-group">
-                    <label>Usuario</label>
-                    <input type="text" id="admin-user" placeholder="admin">
+                    <input type="text" id="admin-user" placeholder="Usuario">
                 </div>
                 <div class="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="admin-pass" placeholder="••••">
+                    <input type="password" id="admin-pass" placeholder="Contraseña">
                 </div>
                 <button class="btn btn-primary" onclick="loginAdmin()">
                     Ingresar
@@ -672,6 +688,10 @@
                     <div class="servicio-nombre">Kapping Gel</div>
                     <div class="servicio-precio">$18.000</div>
                 </div>
+                
+                <button class="btn btn-primary" onclick="continuarASeleccionarDia()" style="margin-top: 20px;">
+                    Continuar →
+                </button>
             </div>
         </div>
 
@@ -777,11 +797,26 @@
                 </div>
                 
                 <div class="resumen-pago">
-                    <p><strong>Recordá:</strong></p>
-                    <p style="margin-top: 10px;">• Llevar el comprobante de pago</p>
-                    <p>• La seña se descuenta del total</p>
+                    <p><strong>📋 Recordá:</strong></p>
+                    <p style="margin-top: 10px;">• La seña se descuenta del total</p>
                     <p>• Cancelaciones con 24hs de anticipación</p>
+                    <p style="color: #dc3545; font-weight: 600;">• No se devuelve seña por cancelación o falta al turno</p>
                 </div>
+                
+                <div class="card" style="margin: 20px 0; background: #e8f5e9;">
+                    <h3 style="margin-bottom: 15px; color: #2e7d32;">📍 Dirección</h3>
+                    <p style="margin-bottom: 15px; font-size: 1.1rem;">
+                        <strong>Lamadrid 1656</strong><br>
+                        Belén de Escobar, Buenos Aires
+                    </p>
+                    <div style="border-radius: 12px; overflow: hidden;">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3292.666665291271!2d-58.74864572515947!3d-34.38439734594712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bc9f8daa65b3dd%3A0xa2bfb671c5a7d339!2sLamadrid%201656%2C%20B1623%20Bel%C3%A9n%20de%20Escobar%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1780533062244!5m2!1ses-419!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+                
+                <a href="https://wa.me/541144063243?text=Hola!%20realize%20un%20turno%20por%20la%20pagina..%0ATe%20adjunto%20el%20comprobante%20de%20la%20se%C3%B1a" class="btn btn-success" style="display: block; text-align: center; text-decoration: none; margin-bottom: 12px;">
+                    📱 Enviar comprobante por WhatsApp
+                </a>
                 
                 <button class="btn btn-primary" onclick="volverInicio()">
                     Volver al inicio
@@ -871,13 +906,33 @@
         
         // Reserva Paso 2
         function seleccionarServicio(servicio, precio) {
-            reservaActual.servicio = servicio;
-            reservaActual.precio = precio;
+            if (!reservaActual.servicios) {
+                reservaActual.servicios = [];
+            }
             
-            document.querySelectorAll('.servicio-card').forEach(c => c.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
+            const index = reservaActual.servicios.findIndex(s => s.nombre === servicio);
             
-            setTimeout(() => irPaso3(), 300);
+            if (index > -1) {
+                // Deseleccionar
+                reservaActual.servicios.splice(index, 1);
+                event.currentTarget.classList.remove('selected');
+            } else {
+                // Seleccionar
+                reservaActual.servicios.push({ nombre: servicio, precio: precio });
+                event.currentTarget.classList.add('selected');
+            }
+            
+            // Calcular total
+            reservaActual.precio = reservaActual.servicios.reduce((sum, s) => sum + s.precio, 0);
+            reservaActual.servicio = reservaActual.servicios.map(s => s.nombre).join(' + ');
+        }
+        
+        function continuarASeleccionarDia() {
+            if (!reservaActual.servicios || reservaActual.servicios.length === 0) {
+                mostrarToast('❌ Seleccioná al menos un servicio');
+                return;
+            }
+            irPaso3();
         }
         
         function volverPaso2() {
@@ -1006,6 +1061,7 @@
             document.querySelectorAll('.horario-btn').forEach(b => b.classList.remove('selected'));
             document.getElementById('horarios-section').classList.add('hidden');
             document.getElementById('btn-continuar-paso3').disabled = true;
+            reservaActual.servicios = [];
         }
         
         function generarId() {
