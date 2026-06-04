@@ -599,6 +599,32 @@
 
             <div id="admin-tab-config" class="hidden">
                 <div class="card">
+                    <h3 style="margin-bottom: 15px;">📱 Agregar a pantalla de inicio</h3>
+                    <p style="margin-bottom: 15px; color: #666;">Instalá la app para recibir notificaciones de nuevas reservas</p>
+                    
+                    <div style="background: #e3f2fd; border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                        <p style="font-weight: 600; margin-bottom: 10px;">iPhone (Safari):</p>
+                        <ol style="padding-left: 20px; color: #333;">
+                            <li>Tocá el botón Compartir ↗️</li>
+                            <li>Desplazá hacia abajo</li>
+                            <li>Tocá "Agregar a pantalla de inicio"</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="background: #e8f5e9; border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                        <p style="font-weight: 600; margin-bottom: 10px;">Android (Chrome):</p>
+                        <ol style="padding-left: 20px; color: #333;">
+                            <li>Tocá los 3 puntos ⋮</li>
+                            <li>Seleccioná "Agregar a pantalla de inicio"</li>
+                        </ol>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="mostrarInstruccionesInstalacion()">
+                        📲 Ver instrucciones detalladas
+                    </button>
+                </div>
+                
+                <div class="card">
                     <h3 style="margin-bottom: 15px;">⚙️ Configuración de Horarios</h3>
                     <p style="margin-bottom: 15px; color: #666;">Modificá los horarios disponibles para cada día</p>
                     
@@ -893,6 +919,15 @@
                 actualizarResumenAdmin();
                 document.getElementById('admin-user').value = '';
                 document.getElementById('admin-pass').value = '';
+                
+                // Solicitar permiso de notificaciones
+                if ('Notification' in window && Notification.permission === 'default') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            mostrarToast('✅ Notificaciones activadas');
+                        }
+                    });
+                }
             } else {
                 mostrarToast('❌ Usuario o contraseña incorrectos');
             }
@@ -1203,6 +1238,26 @@
             mostrarToast('✅ Cambios guardados exitosamente');
         }
         
+        function mostrarInstruccionesInstalacion() {
+            const mensaje = `📱 PARA INSTALAR LA APP Y RECIBIR NOTIFICACIONES:
+
+🍎 iPhone (Safari):
+1. Abrí esta página en Safari
+2. Tocá el botón Compartir ↗️ (abajo)
+3. Desplazá hacia abajo el menú
+4. Tocá "Agregar a pantalla de inicio"
+5. Tocá "Agregar"
+
+🤖 Android (Chrome):
+1. Tocá los 3 puntos ⋮ (arriba a la derecha)
+2. Seleccioná "Agregar a pantalla de inicio"
+3. Tocá "Instalar"
+
+✅ Una vez instalada, vas a recibir notificaciones del sistema cuando ingreses al panel de admin y haya nuevas reservas.`;
+            
+            alert(mensaje);
+        }
+        
         // Cargar horarios guardados al iniciar
         function cargarHorariosGuardados() {
             const guardados = localStorage.getItem('horariosConfig');
@@ -1275,6 +1330,19 @@
             document.getElementById('admin-total').textContent = turnos.length;
             document.getElementById('admin-pendientes').textContent = pendientes;
             document.getElementById('admin-senas').textContent = '$' + senas.toLocaleString();
+            
+            // Notificación si hay turnos pendientes
+            if (pendientes > 0) {
+                mostrarToast(`🔔 Tenés ${pendientes} turno(s) pendiente(s) de confirmación`);
+                
+                // Intentar enviar notificación del sistema si está permitido
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('Lunne Nails', {
+                        body: `Tenés ${pendientes} turno(s) pendiente(s) de confirmación`,
+                        icon: 'logo.png'
+                    });
+                }
+            }
         }
         
         function marcarPagado(id) {
