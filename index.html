@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#d63384">
-    <title>💅 Ailen Nicole - Reserva tu Turno</title>
+    <title>💅 Lunne Nails - Reserva tu Turno</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <style>
@@ -19,7 +19,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #ffe4f1 0%, #ffcce0 100%);
+            background: linear-gradient(135deg, #e0e4f1 0%, #d4c4e0 100%);
             min-height: 100vh;
             padding-bottom: 20px;
         }
@@ -522,7 +522,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1>💅 Ailen Nicole</h1>
+        <h1>💅 Lunne Nails</h1>
         <p>Reservá tu turno de uñas</p>
     </div>
 
@@ -546,16 +546,22 @@
 
         <!-- LOGIN ADMIN -->
         <div id="pantalla-login" class="section">
-            <div class="card">
-                <button class="back-btn" onclick="volverInicio()">← Volver</button>
+            <div class="card" style="text-align: center;">
+                <img src="logo.png" alt="Lunne Nails" style="width: 100%; max-width: 300px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                
+                <button class="back-btn" onclick="volverInicio()" style="margin-bottom: 10px;">← Volver</button>
+                
                 <h2 class="welcome-title">🔐 Acceso Administrador</h2>
                 <p class="welcome-text">Ingresá tus credenciales para acceder al panel</p>
+                
                 <div class="form-group">
                     <input type="text" id="admin-user" placeholder="Usuario">
                 </div>
+                
                 <div class="form-group">
                     <input type="password" id="admin-pass" placeholder="Contraseña">
                 </div>
+                
                 <button class="btn btn-primary" onclick="loginAdmin()">
                     Ingresar
                 </button>
@@ -602,15 +608,25 @@
 
             <div id="admin-tab-config" class="hidden">
                 <div class="card">
-                    <h3 style="margin-bottom: 15px;">Configuración de Pagos</h3>
+                    <h3 style="margin-bottom: 15px;">⚙️ Configuración de Horarios</h3>
+                    <p style="margin-bottom: 15px; color: #666;">Modificá los horarios disponibles para cada día</p>
+                    
+                    <div id="config-horarios-container">
+                        <!-- Se genera dinámicamente -->
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="guardarHorarios()" style="margin-top: 20px;">
+                        💾 Guardar cambios
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">💳 Configuración de Pagos</h3>
                     <div class="alias-box">
                         <div class="alias-label">Tu alias de Mercado Pago</div>
                         <div class="alias-value" id="config-alias">Ailuaristule</div>
                         <div class="alias-nombre">Ailen Nicole Aristule</div>
                     </div>
-                    <button class="btn btn-secondary" onclick="volverInicio()">
-                        Volver al inicio
-                    </button>
                 </div>
             </div>
         </div>
@@ -710,6 +726,13 @@
                 <h2 class="welcome-title">Seleccioná el día</h2>
                 <div class="dias-grid" id="dias-container"></div>
                 
+                <div id="fecha-section" class="hidden">
+                    <h3 style="margin-top: 25px; margin-bottom: 15px;">Seleccioná la fecha</h3>
+                    <div class="form-group">
+                        <input type="date" id="fecha-turno" onchange="seleccionarFecha(this.value)">
+                    </div>
+                </div>
+                
                 <div id="horarios-section" class="hidden">
                     <h3 style="margin-top: 25px; margin-bottom: 15px;">Seleccioná la hora</h3>
                     <div class="horarios-grid" id="horarios-container"></div>
@@ -752,6 +775,12 @@
                         <span class="resumen-total">Seña a pagar:</span>
                         <span class="resumen-total">$5.000</span>
                     </div>
+                </div>
+                
+                <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 15px; margin: 15px 0; text-align: center;">
+                    <p style="color: #856404; font-weight: 600; margin: 0;">
+                        ⏰ El horario puede ser 15 minutos después del indicado
+                    </p>
                 </div>
                 
                 <div class="alias-box">
@@ -831,8 +860,17 @@
     <script>
         // Configuración
         const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-        const HORARIOS = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30',
-                         '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30'];
+        
+        // Horarios específicos por día
+        const HORARIOS_POR_DIA = {
+            'Lunes': ['08:15', '11:30', '14:00', '16:30', '18:30'],
+            'Martes': ['09:00', '11:00', '13:30', '16:30'],
+            'Miércoles': ['08:15', '11:30', '14:00', '16:30', '18:30'],
+            'Jueves': ['08:15', '11:30', '14:00', '16:30', '18:30'],
+            'Viernes': ['09:00', '12:00', '15:30', '17:30'],
+            'Sábado': ['09:00', '11:30', '13:30', '16:30', '18:30']
+        };
+        
         const ALIAS_MP = 'Ailuaristule';
         const NOMBRE_TITULAR = 'Ailen Nicole Aristule';
         const SENA = 5000;
@@ -964,7 +1002,21 @@
             document.querySelectorAll('.dia-btn').forEach(b => b.classList.remove('selected'));
             btnElement.classList.add('selected');
             
-            renderizarHorarios(dia);
+            // Mostrar selector de fecha
+            document.getElementById('fecha-section').classList.remove('hidden');
+            
+            // Configurar fecha mínima (hoy)
+            const hoy = new Date().toISOString().split('T')[0];
+            document.getElementById('fecha-turno').min = hoy;
+        }
+        
+        function seleccionarFecha(fecha) {
+            if (!fecha) return;
+            
+            reservaActual.fecha = fecha;
+            
+            // Mostrar horarios
+            renderizarHorarios(reservaActual.dia);
             document.getElementById('horarios-section').classList.remove('hidden');
         }
         
@@ -972,9 +1024,10 @@
             const container = document.getElementById('horarios-container');
             container.innerHTML = '';
             
-            const ocupados = turnos.filter(t => t.dia === dia).map(t => t.hora);
+            const horariosDelDia = HORARIOS_POR_DIA[dia] || [];
+            const ocupados = turnos.filter(t => t.dia === dia && t.fecha === reservaActual.fecha).map(t => t.hora);
             
-            HORARIOS.forEach(hora => {
+            horariosDelDia.forEach(hora => {
                 const btn = document.createElement('button');
                 btn.className = 'horario-btn';
                 btn.textContent = hora;
@@ -1001,7 +1054,7 @@
         function irPaso4() {
             document.getElementById('resumen-servicio').textContent = reservaActual.servicio;
             document.getElementById('resumen-precio').textContent = '$' + reservaActual.precio.toLocaleString();
-            document.getElementById('resumen-fecha').textContent = reservaActual.dia + ' a las ' + reservaActual.hora;
+            document.getElementById('resumen-fecha').textContent = reservaActual.dia + ' ' + reservaActual.fecha + ' a las ' + reservaActual.hora;
             showSection('reserva-paso4');
         }
         
@@ -1036,6 +1089,7 @@
                 servicio: reservaActual.servicio,
                 precio: reservaActual.precio,
                 dia: reservaActual.dia,
+                fecha: reservaActual.fecha,
                 hora: reservaActual.hora,
                 sena: SENA,
                 estado: 'pendiente',
@@ -1047,7 +1101,7 @@
             
             document.getElementById('confirmacion-detalles').innerHTML = `
                 <strong>${turno.servicio}</strong><br>
-                ${turno.dia} a las ${turno.hora}<br>
+                ${turno.dia} ${turno.fecha} a las ${turno.hora}<br>
                 Precio: $${turno.precio.toLocaleString()}
             `;
             
@@ -1059,6 +1113,8 @@
             document.querySelectorAll('.servicio-card').forEach(c => c.classList.remove('selected'));
             document.querySelectorAll('.dia-btn').forEach(b => b.classList.remove('selected'));
             document.querySelectorAll('.horario-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('fecha-turno').value = '';
+            document.getElementById('fecha-section').classList.add('hidden');
             document.getElementById('horarios-section').classList.add('hidden');
             document.getElementById('btn-continuar-paso3').disabled = true;
             reservaActual.servicios = [];
@@ -1076,6 +1132,88 @@
             
             document.getElementById('admin-tab-turnos').classList.toggle('hidden', tab !== 'turnos');
             document.getElementById('admin-tab-config').classList.toggle('hidden', tab !== 'config');
+            
+            if (tab === 'config') {
+                renderizarConfigHorarios();
+            }
+        }
+        
+        function renderizarConfigHorarios() {
+            const container = document.getElementById('config-horarios-container');
+            container.innerHTML = '';
+            
+            DIAS.forEach(dia => {
+                const horarios = HORARIOS_POR_DIA[dia];
+                const div = document.createElement('div');
+                div.style.marginBottom = '20px';
+                div.innerHTML = `
+                    <h4 style="margin-bottom: 10px; color: #333;">${dia}</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;" id="horarios-${dia}">
+                        ${horarios.map(h => `
+                            <span style="background: #e3f2fd; padding: 8px 12px; border-radius: 20px; font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
+                                ${h}
+                                <button onclick="eliminarHorario('${dia}', '${h}')" style="background: #ff5252; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;">×</button>
+                            </span>
+                        `).join('')}
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="time" id="nuevo-horario-${dia}" style="flex: 1; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                        <button onclick="agregarHorario('${dia}')" style="background: #4caf50; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600;">+ Agregar</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function agregarHorario(dia) {
+            const input = document.getElementById(`nuevo-horario-${dia}`);
+            const hora = input.value;
+            
+            if (!hora) {
+                mostrarToast('❌ Seleccioná un horario');
+                return;
+            }
+            
+            // Formatear hora a HH:MM
+            const [h, m] = hora.split(':');
+            const horaFormateada = `${h.padStart(2, '0')}:${m}`;
+            
+            if (HORARIOS_POR_DIA[dia].includes(horaFormateada)) {
+                mostrarToast('❌ Ese horario ya existe');
+                return;
+            }
+            
+            HORARIOS_POR_DIA[dia].push(horaFormateada);
+            HORARIOS_POR_DIA[dia].sort();
+            
+            // Guardar en localStorage
+            localStorage.setItem('horariosConfig', JSON.stringify(HORARIOS_POR_DIA));
+            
+            renderizarConfigHorarios();
+            mostrarToast('✅ Horario agregado');
+        }
+        
+        function eliminarHorario(dia, hora) {
+            HORARIOS_POR_DIA[dia] = HORARIOS_POR_DIA[dia].filter(h => h !== hora);
+            
+            // Guardar en localStorage
+            localStorage.setItem('horariosConfig', JSON.stringify(HORARIOS_POR_DIA));
+            
+            renderizarConfigHorarios();
+            mostrarToast('🗑 Horario eliminado');
+        }
+        
+        function guardarHorarios() {
+            mostrarToast('✅ Cambios guardados exitosamente');
+        }
+        
+        // Cargar horarios guardados al iniciar
+        function cargarHorariosGuardados() {
+            const guardados = localStorage.getItem('horariosConfig');
+            if (guardados) {
+                const horariosParseados = JSON.parse(guardados);
+                Object.assign(HORARIOS_POR_DIA, horariosParseados);
+            }
         }
         
         function filtrarAdmin(filtro) {
@@ -1117,7 +1255,7 @@
                         📱 ${t.telefono}
                     </div>
                     <div style="color: #666; margin-bottom: 5px;">
-                        📅 ${t.dia} a las ${t.hora}
+                        📅 ${t.dia} ${t.fecha || ''} a las ${t.hora}
                     </div>
                     <div style="color: #666; margin-bottom: 10px;">
                         💅 ${t.servicio} - $${t.precio.toLocaleString()}
@@ -1171,6 +1309,9 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
+        
+        // Inicializar
+        cargarHorariosGuardados();
     </script>
 </body>
 </html>
