@@ -532,9 +532,161 @@
             color: #155724;
             line-height: 1.5;
         }
+        
+        /* ====================== */
+        /* MODO OSCURO 🌙         */
+        /* ====================== */
+        body.dark-mode {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+        }
+        
+        body.dark-mode .header {
+            background: linear-gradient(135deg, #1a237e 0%, #0d1642 100%);
+        }
+        
+        body.dark-mode .card,
+        body.dark-mode .turno-card {
+            background: #1e293b;
+            color: #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        body.dark-mode .welcome-title,
+        body.dark-mode .form-group label,
+        body.dark-mode .turno-cliente {
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select {
+            background: #334155;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode .servicio-card {
+            background: #334155;
+            border-color: #475569;
+        }
+        
+        body.dark-mode .servicio-nombre {
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode .nav-tabs,
+        body.dark-mode .nav-admin {
+            background: #1e293b;
+        }
+        
+        body.dark-mode .nav-tab {
+            color: #94a3b8;
+        }
+        
+        body.dark-mode .welcome-text,
+        body.dark-mode .turno-info {
+            color: #94a3b8;
+        }
+        
+        body.dark-mode .back-btn {
+            color: #60a5fa;
+        }
+        
+        body.dark-mode .resumen-pago {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode .empty-state {
+            color: #94a3b8;
+        }
+        
+        /* ====================== */
+        /* MICROINTERACCIONES ✨   */
+        /* ====================== */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            40% { transform: scale(0.95); }
+            80% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+        
+        .btn-animate {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-animate::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.3),
+                transparent
+            );
+            transition: left 0.5s;
+        }
+        
+        .btn-animate:hover::after {
+            left: 100%;
+        }
+        
+        .btn-animate:active {
+            animation: pop 0.3s ease-out;
+        }
+        
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: floatUp 1s ease-out forwards;
+            font-size: 1.5rem;
+        }
+        
+        /* Toggle Dark Mode */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        body.dark-mode .dark-mode-toggle {
+            background: #1e293b;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
     </style>
 </head>
 <body>
+    <!-- Toggle Dark Mode -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Cambiar modo">🌙</button>
+    
     <!-- Header -->
     <div class="header">
         <h1>💅 Lunne Nails</h1>
@@ -548,9 +700,9 @@
                 <h2 class="welcome-title">¡Bienvenida! 💅</h2>
                 <p class="welcome-text">
                     Reservá tu turno de forma fácil y rápida.<br>
-                    Seña de $5.000 para confirmar tu lugar.
+                    Seña de $4.000 para confirmar tu lugar.
                 </p>
-                <button class="btn btn-primary" onclick="mostrarReserva()">
+                <button class="btn btn-primary btn-animate" onclick="reservarConEfecto()">
                     📅 Reservar Turno
                 </button>
                 <button class="btn btn-secondary" onclick="mostrarLoginAdmin()">
@@ -694,7 +846,7 @@
                 <div class="card">
                     <h3 style="margin-bottom: 15px;">💳 Configuración de Pagos</h3>
                     <div class="alias-box">
-                        <div class="alias-label">Tu alias de Mercado Pago</div>
+                        <div class="alias-label">Tu alias de Ualá</div>
                         <div class="alias-value" id="config-alias">Ailuaristule</div>
                         <div class="alias-nombre">Ailen Nicole Aristule</div>
                     </div>
@@ -844,7 +996,7 @@
                     </div>
                     <div class="resumen-item">
                         <span class="resumen-total">Seña a pagar:</span>
-                        <span class="resumen-total">$5.000</span>
+                        <span class="resumen-total">$4.000</span>
                     </div>
                 </div>
                 
@@ -854,13 +1006,18 @@
                     </p>
                 </div>
                 
-                <div class="alias-box">
-                    <div class="alias-label">Enviar seña a este alias:</div>
-                    <div class="alias-value" onclick="copiarAlias()">Ailuaristule</div>
-                    <div class="alias-nombre">Ailen Nicole Aristule</div>
-                    <p style="margin-top: 10px; font-size: 0.85rem; color: #856404;">
-                        Tocá el alias para copiarlo
-                    </p>
+                <!-- ENVIAR SEÑA -->
+                <div class="card">
+                    <h2 class="welcome-title">Confirmar y enviar seña</h2>
+                    
+                    <div class="alias-box">
+                        <h3 style="margin-bottom: 15px; color: #856404;">💳 Pago de seña</h3>
+                        <p style="margin-bottom: 15px; color: #856404; font-size: 0.9rem;">Transferí la seña de $4.000 a este alias de Ualá:</p>
+                        <div class="alias-value" onclick="copiarAlias()">Ailuaristule</div>
+                        <div class="alias-nombre">Ailen Nicole Aristule</div>
+                        <p style="margin-top: 15px; font-size: 0.85rem; color: #856404;">Tocá el alias para copiarlo</p>
+                        <p style="margin-top: 10px; font-size: 0.85rem; color: #856404;">📱 Si tenés Ualá, buscá el alias y enviá la seña</p>
+                    </div>
                 </div>
                 
                 <p style="text-align: center; margin-bottom: 15px; color: #666;">
@@ -869,6 +1026,10 @@
                 
                 <button class="btn btn-success" onclick="confirmarReserva()">
                     ✅ Ya pagué, confirmar turno
+                </button>
+                
+                <button class="btn btn-secondary" onclick="volverInicio()" style="margin-top: 10px;">
+                    ❌ Cancelar Reserva
                 </button>
                 
                 <p style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: #999;">
@@ -925,7 +1086,7 @@
         const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         
         // Horarios específicos por día
-        const HORARIOS_POR_DIA = {
+        const HORARIOS_POR_DIA = JSON.parse(localStorage.getItem('horariosConfig')) || {
             'Lunes': ['08:15', '11:30', '14:00', '16:30', '18:30'],
             'Martes': ['09:00', '11:00', '13:30', '16:30'],
             'Miércoles': ['08:15', '11:30', '14:00', '16:30', '18:30'],
@@ -936,7 +1097,7 @@
         
         const ALIAS_MP = 'Ailuaristule';
         const NOMBRE_TITULAR = 'Ailen Nicole Aristule';
-        const SENA = 5000;
+        const SENA = 4000;
         
         // EmailJS Config
         const EMAILJS_CONFIG = {
@@ -1075,7 +1236,7 @@
             const user = document.getElementById('admin-user').value;
             const pass = document.getElementById('admin-pass').value;
             
-            if (user === 'admin' && pass === 'admin') {
+            if (user === 'admin' && pass === 'ailenaristule') {
                 // Guardar sesión en localStorage
                 localStorage.setItem('adminSession', JSON.stringify({
                     loggedIn: true,
@@ -1242,6 +1403,27 @@
                 return false;
             }
             
+            // Verificar si hay cierre de local en la fecha seleccionada
+            const cierres = JSON.parse(localStorage.getItem('cierresLocal') || '[]');
+            
+            const cierreActivo = cierres.find(c => {
+                const inicio = new Date(c.fechaInicio + 'T00:00:00');
+                const fin = new Date(c.fechaFin + 'T00:00:00');
+                return fechaSeleccionada >= inicio && fechaSeleccionada <= fin && c.activo;
+            });
+            
+            if (cierreActivo) {
+                const fechaInicio = formatearFecha(cierreActivo.fechaInicio);
+                const fechaFin = formatearFecha(cierreActivo.fechaFin);
+                
+                alert(`🚫 Perdón! Local cerrado por ${cierreActivo.motivo}\n\n📅 Desde: ${fechaInicio}\n🏮 Hasta: ${fechaFin}\n\n¡Gracias por tu comprensión! ❤️`);
+                
+                document.getElementById('fecha-turno').value = '';
+                document.getElementById('horarios-section').classList.add('hidden');
+                document.getElementById('btn-continuar-paso3').disabled = true;
+                return false;
+            }
+            
             seleccionarFecha(fecha);
             return true;
         }
@@ -1307,6 +1489,21 @@
             // Verificar que Firebase esté listo
             if (!window.firebaseDB) {
                 mostrarToast('❌ Error: Base de datos no disponible. Recargá la página.');
+                return;
+            }
+            
+            // Verificar si hay cierre de local en la fecha seleccionada
+            const fechaSeleccionada = new Date(reservaActual.fecha + 'T00:00:00');
+            const cierres = JSON.parse(localStorage.getItem('cierresLocal') || '[]');
+            
+            const cierreActivo = cierres.find(c => {
+                const inicio = new Date(c.fechaInicio + 'T00:00:00');
+                const fin = new Date(c.fechaFin + 'T00:00:00');
+                return fechaSeleccionada >= inicio && fechaSeleccionada <= fin && c.activo;
+            });
+            
+            if (cierreActivo) {
+                mostrarToast(`❌ Local cerrado: ${cierreActivo.motivo}`);
                 return;
             }
             
@@ -1459,6 +1656,7 @@
         }
         
         function guardarHorarios() {
+            localStorage.setItem('horariosConfig', JSON.stringify(HORARIOS_POR_DIA));
             mostrarToast('✅ Cambios guardados exitosamente');
         }
         
@@ -1697,8 +1895,112 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
         
+        // =============================
+        // MODO OSCURO Y MICROINTERACCIONES ✨
+        // =============================
+        
+        function toggleDarkMode() {
+            const body = document.body;
+            const toggle = document.querySelector('.dark-mode-toggle');
+            
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                toggle.textContent = '☀️';
+                toggle.title = 'Modo claro';
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                toggle.textContent = '🌙';
+                toggle.title = 'Modo oscuro';
+                localStorage.setItem('darkMode', 'false');
+            }
+            
+            // Efecto pop en el botón
+            toggle.style.animation = 'none';
+            setTimeout(() => {
+                toggle.style.animation = 'pop 0.3s ease-out';
+            }, 10);
+        }
+        
+        // Cargar preferencia de modo oscuro
+        function cargarDarkMode() {
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.dark-mode-toggle').textContent = '☀️';
+                document.querySelector('.dark-mode-toggle').title = 'Modo claro';
+            }
+        }
+        
+        // Sonido pop (Web Audio API)
+        function playPopSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc.frequency.setValueAtTime(600, audioContext.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.1);
+                
+                gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+                
+                osc.start(audioContext.currentTime);
+                osc.stop(audioContext.currentTime + 0.15);
+            } catch (e) {
+                console.log('Sonido no disponible');
+            }
+        }
+        
+        // Crear partículas de celebración
+        function crearParticulas(x, y) {
+            const emojis = ['✨', '🎉', '💅', '✨', '💖'];
+            
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    particle.style.left = (x + Math.random() * 40 - 20) + 'px';
+                    particle.style.top = (y + Math.random() * 40 - 20) + 'px';
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 1000);
+                }, i * 100);
+            }
+        }
+        
+        // Función combinada para reservar con efectos
+        function reservarConEfecto() {
+            // Sonido pop
+            playPopSound();
+            
+            // Obtener posición del botón para partículas
+            const btn = event.target;
+            const rect = btn.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top;
+            
+            // Crear partículas
+            crearParticulas(x, y);
+            
+            // Animación extra en el botón
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                btn.style.transform = 'scale(1)';
+            }, 150);
+            
+            // Ir a la reserva después del efecto
+            setTimeout(() => {
+                mostrarReserva();
+            }, 200);
+        }
+        
         // Inicializar
         cargarHorariosGuardados();
+        cargarDarkMode();
         
         // Esperar a que Firebase esté listo antes de cargar turnos
         function esperarFirebase() {
