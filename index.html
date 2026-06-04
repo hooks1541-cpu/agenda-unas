@@ -10,6 +10,36 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqJIp5QvxS39EhNVkb4balJ8UbGvnGZms",
+            authDomain: "lunne-nails-agenda.firebaseapp.com",
+            projectId: "lunne-nails-agenda",
+            storageBucket: "lunne-nails-agenda.firebasestorage.app",
+            messagingSenderId: "114518672400",
+            appId: "1:114518672400:web:4a04f587bbe1016918f695"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        // Exportar para usar en el script principal
+        window.firebaseDB = db;
+        window.firebaseCollection = collection;
+        window.firebaseAddDoc = addDoc;
+        window.firebaseOnSnapshot = onSnapshot;
+        window.firebaseQuery = query;
+        window.firebaseOrderBy = orderBy;
+        window.firebaseDeleteDoc = deleteDoc;
+        window.firebaseDoc = doc;
+        window.firebaseUpdateDoc = updateDoc;
+    </script>
     <style>
         * {
             margin: 0;
@@ -926,9 +956,80 @@
         emailjs.init(EMAILJS_CONFIG.publicKey);
         
         // Datos
-        let turnos = JSON.parse(localStorage.getItem('turnosAilen')) || [];
+        let turnos = [];
         let reservaActual = {};
         let filtroAdmin = 'todos';
+        let unsubscribeTurnos = null;
+        
+        // Función para cargar turnos desde Firebase
+        function cargarTurnosDesdeFirebase() {
+            const db = window.firebaseDB;
+            const collection = window.firebaseCollection;
+            const query = window.firebaseQuery;
+            const orderBy = window.firebaseOrderBy;
+            const onSnapshot = window.firebaseOnSnapshot;
+            
+            const q = query(collection(db, 'turnos'), orderBy('fechaCreacion', 'desc'));
+            
+            unsubscribeTurnos = onSnapshot(q, (snapshot) => {
+                turnos = [];
+                snapshot.forEach((doc) => {
+                    turnos.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Si estamos en el panel admin, actualizar la vista
+                const adminPanel = document.getElementById('pantalla-admin');
+                if (adminPanel && adminPanel.classList.contains('active')) {
+                    renderizarAdminTurnos();
+                    actualizarResumenAdmin();
+                }
+            });
+        }
+        
+        // Función para guardar turno en Firebase
+        async function guardarTurnoEnFirebase(turno) {
+            try {
+                const db = window.firebaseDB;
+                const collection = window.firebaseCollection;
+                const addDoc = window.firebaseAddDoc;
+                
+                await addDoc(collection(db, 'turnos'), turno);
+                return true;
+            } catch (error) {
+                console.error('Error al guardar turno:', error);
+                return false;
+            }
+        }
+        
+        // Función para eliminar turno de Firebase
+        async function eliminarTurnoDeFirebase(id) {
+            try {
+                const db = window.firebaseDB;
+                const deleteDoc = window.firebaseDeleteDoc;
+                const doc = window.firebaseDoc;
+                
+                await deleteDoc(doc(db, 'turnos', id));
+                return true;
+            } catch (error) {
+                console.error('Error al eliminar turno:', error);
+                return false;
+            }
+        }
+        
+        // Función para actualizar turno en Firebase
+        async function actualizarTurnoEnFirebase(id, datos) {
+            try {
+                const db = window.firebaseDB;
+                const updateDoc = window.firebaseUpdateDoc;
+                const doc = window.firebaseDoc;
+                
+                await updateDoc(doc(db, 'turnos', id), datos);
+                return true;
+            } catch (error) {
+                console.error('Error al actualizar turno:', error);
+                return false;
+            }
+        }
         
         // Navegación
         function showSection(id) {
@@ -1182,9 +1283,8 @@
             });
         }
         
-        function confirmarReserva() {
+        async function confirmarReserva() {
             const turno = {
-                id: generarId(),
                 cliente: reservaActual.nombre,
                 telefono: reservaActual.telefono,
                 servicio: reservaActual.servicio,
@@ -1197,31 +1297,35 @@
                 fechaCreacion: new Date().toISOString()
             };
             
-            turnos.push(turno);
-            localStorage.setItem('turnosAilen', JSON.stringify(turnos));
+            // Guardar en Firebase
+            const guardado = await guardarTurnoEnFirebase(turno);
             
-            // Enviar email de notificación
-            enviarEmailNuevaReserva(turno);
-            
-            document.getElementById('confirmacion-detalles').innerHTML = `
-                <strong>${turno.servicio}</strong><br>
-                ${turno.dia} ${turno.fecha} a las ${turno.hora}<br>
-                Precio: $${turno.precio.toLocaleString()}
-            `;
-            
-            showSection('reserva-confirmada');
-            
-            // Limpiar formulario
-            document.getElementById('reserva-nombre').value = '';
-            document.getElementById('reserva-telefono').value = '';
-            document.querySelectorAll('.servicio-card').forEach(c => c.classList.remove('selected'));
-            document.querySelectorAll('.dia-btn').forEach(b => b.classList.remove('selected'));
-            document.querySelectorAll('.horario-btn').forEach(b => b.classList.remove('selected'));
-            document.getElementById('fecha-turno').value = '';
-            document.getElementById('fecha-section').classList.add('hidden');
-            document.getElementById('horarios-section').classList.add('hidden');
-            document.getElementById('btn-continuar-paso3').disabled = true;
-            reservaActual.servicios = [];
+            if (guardado) {
+                // Enviar email de notificación
+                enviarEmailNuevaReserva(turno);
+                
+                document.getElementById('confirmacion-detalles').innerHTML = `
+                    <strong>${turno.servicio}</strong><br>
+                    ${turno.dia} ${turno.fecha} a las ${turno.hora}<br>
+                    Precio: $${turno.precio.toLocaleString()}
+                `;
+                
+                showSection('reserva-confirmada');
+                
+                // Limpiar formulario
+                document.getElementById('reserva-nombre').value = '';
+                document.getElementById('reserva-telefono').value = '';
+                document.querySelectorAll('.servicio-card').forEach(c => c.classList.remove('selected'));
+                document.querySelectorAll('.dia-btn').forEach(b => b.classList.remove('selected'));
+                document.querySelectorAll('.horario-btn').forEach(b => b.classList.remove('selected'));
+                document.getElementById('fecha-turno').value = '';
+                document.getElementById('fecha-section').classList.add('hidden');
+                document.getElementById('horarios-section').classList.add('hidden');
+                document.getElementById('btn-continuar-paso3').disabled = true;
+                reservaActual.servicios = [];
+            } else {
+                mostrarToast('❌ Error al guardar el turno. Intentá de nuevo.');
+            }
         }
         
         function enviarEmailNuevaReserva(turno) {
@@ -1537,24 +1641,23 @@
             }
         }
         
-        function marcarPagado(id) {
-            const turno = turnos.find(t => t.id === id);
-            if (turno) {
-                turno.estado = 'pagado';
-                localStorage.setItem('turnosAilen', JSON.stringify(turnos));
-                renderizarAdminTurnos();
-                actualizarResumenAdmin();
+        async function marcarPagado(id) {
+            const resultado = await actualizarTurnoEnFirebase(id, { estado: 'pagado' });
+            if (resultado) {
                 mostrarToast('✅ Turno marcado como pagado');
+            } else {
+                mostrarToast('❌ Error al actualizar turno');
             }
         }
         
-        function eliminarTurno(id) {
+        async function eliminarTurno(id) {
             if (confirm('¿Eliminar este turno?')) {
-                turnos = turnos.filter(t => t.id !== id);
-                localStorage.setItem('turnosAilen', JSON.stringify(turnos));
-                renderizarAdminTurnos();
-                actualizarResumenAdmin();
-                mostrarToast('🗑 Turno eliminado');
+                const resultado = await eliminarTurnoDeFirebase(id);
+                if (resultado) {
+                    mostrarToast('🗑 Turno eliminado');
+                } else {
+                    mostrarToast('❌ Error al eliminar turno');
+                }
             }
         }
         
@@ -1569,18 +1672,20 @@
         // Inicializar
         cargarHorariosGuardados();
         
+        // Cargar turnos desde Firebase
+        cargarTurnosDesdeFirebase();
+        
         // Verificar si hay sesión de admin activa
         checkAdminSession();
         
         // Verificar cierres de local
         verificarCierreLocal();
         
-        // Auto-refresh del panel admin cada 15 segundos
+        // Auto-refresh del panel admin cada 15 segundos (backup)
         setInterval(() => {
             const adminPanel = document.getElementById('pantalla-admin');
             if (adminPanel && adminPanel.classList.contains('active')) {
-                // Recargar turnos desde localStorage
-                turnos = JSON.parse(localStorage.getItem('turnosAilen')) || [];
+                // Firebase ya actualiza en tiempo real, esto es backup
                 renderizarAdminTurnos();
                 actualizarResumenAdmin();
             }
