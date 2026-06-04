@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#d63384">
-    <title>💅 Agenda de Uñas</title>
+    <title>💅 Ailen Nicole - Reserva tu Turno</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <style>
@@ -21,113 +21,66 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #ffe4f1 0%, #ffcce0 100%);
             min-height: 100vh;
-            padding-bottom: 80px;
+            padding-bottom: 20px;
         }
         
         .header {
-            background: #d63384;
+            background: linear-gradient(135deg, #d63384 0%, #b52a6f 100%);
             color: white;
-            padding: 20px;
+            padding: 30px 20px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            box-shadow: 0 4px 20px rgba(214, 51, 132, 0.3);
         }
         
         .header h1 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 600;
+            margin-bottom: 5px;
         }
         
-        .nav-tabs {
-            display: flex;
-            background: white;
-            border-radius: 12px;
-            margin: 15px;
-            padding: 5px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            overflow-x: auto;
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
         }
         
-        .nav-tab {
-            flex: 1;
-            padding: 12px 8px;
-            text-align: center;
-            border: none;
-            background: transparent;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #666;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-        
-        .nav-tab.active {
-            background: #d63384;
-            color: white;
-        }
-        
-        .content {
-            padding: 0 15px;
-        }
-        
-        .section {
-            display: none;
-        }
-        
-        .section.active {
-            display: block;
+        .container {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
         }
         
         .card {
             background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
         
-        .form-group {
-            margin-bottom: 18px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
+        .welcome-title {
+            font-size: 1.4rem;
             color: #333;
-            font-size: 0.95rem;
+            margin-bottom: 10px;
+            text-align: center;
         }
         
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-            -webkit-appearance: none;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #d63384;
+        .welcome-text {
+            color: #666;
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
         
         .btn {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
+            margin-bottom: 12px;
         }
         
         .btn:active {
@@ -140,33 +93,164 @@
             box-shadow: 0 4px 15px rgba(214, 51, 132, 0.4);
         }
         
-        .btn-danger {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            color: white;
-        }
-        
         .btn-secondary {
             background: #f8f9fa;
+            color: #666;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-mercadopago {
+            background: linear-gradient(135deg, #009ee3 0%, #0077b3 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 158, 227, 0.4);
+        }
+        
+        .btn-uala {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
             color: #333;
-            border: 1px solid #ddd;
+            font-size: 0.95rem;
         }
         
-        .checkbox-group {
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d63384;
+        }
+        
+        .servicio-card {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .servicio-card:hover {
+            border-color: #d63384;
+        }
+        
+        .servicio-card.selected {
+            background: #ffe4f1;
+            border-color: #d63384;
+        }
+        
+        .servicio-nombre {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .servicio-precio {
+            color: #d63384;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .resumen-pago {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .resumen-item {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
         }
         
-        .checkbox-group input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
-            accent-color: #d63384;
+        .resumen-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .resumen-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #d63384;
+        }
+        
+        .alias-box {
+            background: #fff3cd;
+            border: 2px dashed #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .alias-label {
+            font-size: 0.9rem;
+            color: #856404;
+            margin-bottom: 8px;
+        }
+        
+        .alias-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #d63384;
+            font-family: monospace;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .alias-nombre {
+            color: #666;
+            font-size: 0.9rem;
         }
         
         .turno-card {
             background: white;
-            border-radius: 16px;
+            border-radius: 15px;
             padding: 18px;
             margin-bottom: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -186,74 +270,41 @@
             color: #333;
         }
         
-        .turno-id {
-            background: #f0f0f0;
-            padding: 4px 10px;
+        .turno-estado {
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            color: #666;
-        }
-        
-        .turno-info {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 5px;
-        }
-        
-        .turno-precio {
-            display: flex;
-            gap: 15px;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #eee;
-        }
-        
-        .precio-item {
-            text-align: center;
-        }
-        
-        .precio-label {
             font-size: 0.75rem;
-            color: #999;
-            text-transform: uppercase;
-        }
-        
-        .precio-valor {
             font-weight: 600;
-            font-size: 1rem;
         }
         
-        .precio-total {
-            color: #d63384;
+        .estado-pendiente {
+            background: #fff3cd;
+            color: #856404;
         }
         
-        .precio-sena {
-            color: #28a745;
-        }
-        
-        .precio-saldo {
-            color: #fd7e14;
+        .estado-pagado {
+            background: #d4edda;
+            color: #155724;
         }
         
         .filtros {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 15px;
             overflow-x: auto;
             padding-bottom: 5px;
         }
         
         .filtro-btn {
-            padding: 10px 18px;
+            padding: 10px 16px;
             border: 2px solid #d63384;
             background: white;
             color: #d63384;
             border-radius: 25px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.3s;
         }
         
         .filtro-btn.active {
@@ -261,12 +312,12 @@
             color: white;
         }
         
-        .resumen {
+        .resumen-admin {
             background: linear-gradient(135deg, #d63384 0%, #b52a6f 100%);
             color: white;
-            border-radius: 16px;
+            border-radius: 15px;
             padding: 20px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .resumen-grid {
@@ -277,83 +328,40 @@
         }
         
         .resumen-item h3 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin-bottom: 5px;
         }
         
         .resumen-item p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             opacity: 0.9;
         }
         
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #999;
-        }
-        
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 15px;
-        }
-        
-        .search-box {
+        .nav-admin {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .search-box input {
-            flex: 1;
-            padding: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 1rem;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
             background: white;
-            border-radius: 20px;
-            padding: 25px;
-            width: 100%;
-            max-width: 350px;
-            text-align: center;
-        }
-        
-        .modal-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #333;
-        }
-        
-        .modal-text {
-            color: #666;
+            border-radius: 12px;
             margin-bottom: 20px;
-            line-height: 1.5;
+            padding: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
+        .nav-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #666;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .nav-tab.active {
+            background: #d63384;
+            color: white;
         }
         
         .toast {
@@ -363,9 +371,9 @@
             transform: translateX(-50%) translateY(100px);
             background: #333;
             color: white;
-            padding: 14px 24px;
+            padding: 16px 24px;
             border-radius: 12px;
-            font-size: 0.95rem;
+            font-size: 1rem;
             opacity: 0;
             transition: all 0.3s;
             z-index: 2000;
@@ -376,334 +384,628 @@
             opacity: 1;
         }
         
-        .hidden {
-            display: none !important;
+        .back-btn {
+            background: none;
+            border: none;
+            color: #d63384;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #e0e0e0;
+        }
+        
+        .step.active {
+            background: #d63384;
+        }
+        
+        .step.completed {
+            background: #28a745;
+        }
+        
+        .horarios-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .horario-btn {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .horario-btn:hover:not(:disabled) {
+            border-color: #d63384;
+        }
+        
+        .horario-btn.selected {
+            background: #d63384;
+            color: white;
+            border-color: #d63384;
+        }
+        
+        .horario-btn:disabled {
+            background: #f0f0f0;
+            color: #999;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        
+        .dias-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .dia-btn {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .dia-btn.selected {
+            background: #d63384;
+            color: white;
+            border-color: #d63384;
+        }
+        
+        .confirmacion-box {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .confirmacion-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        
+        .confirmacion-title {
+            font-size: 1.3rem;
+            color: #155724;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .confirmacion-text {
+            color: #155724;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <div class="header">
-        <h1>💅 Agenda de Uñas</h1>
+        <h1>💅 Ailen Nicole</h1>
+        <p>Reservá tu turno de uñas</p>
     </div>
-    
-    <div class="nav-tabs">
-        <button class="nav-tab active" onclick="showSection('agendar')">📅 Agendar</button>
-        <button class="nav-tab" onclick="showSection('turnos')">📋 Turnos</button>
-        <button class="nav-tab" onclick="showSection('buscar')">🔍 Buscar</button>
-    </div>
-    
-    <div class="content">
-        <!-- Sección Agendar -->
-        <div id="section-agendar" class="section active">
+
+    <div class="container">
+        <!-- PANTALLA INICIAL -->
+        <div id="pantalla-inicio" class="section active">
             <div class="card">
-                <div class="form-group">
-                    <label>👤 Nombre del Cliente</label>
-                    <input type="text" id="cliente" placeholder="Ej: María González">
-                </div>
-                
-                <div class="form-group">
-                    <label>📅 Día</label>
-                    <select id="dia"></select>
-                </div>
-                
-                <div class="form-group">
-                    <label>🕐 Hora</label>
-                    <select id="hora"></select>
-                </div>
-                
-                <div class="form-group">
-                    <label>💅 Servicio</label>
-                    <select id="servicio" onchange="toggleOtroServicio()">
-                        <option value="Esmaltado semipermanente">Esmaltado semipermanente</option>
-                        <option value="Kapping gel">Kapping gel</option>
-                        <option value="Soft gel">Soft gel</option>
-                        <option value="Uñas esculpidas">Uñas esculpidas</option>
-                        <option value="Nail art">Nail art</option>
-                        <option value="Retiro de producto">Retiro de producto</option>
-                        <option value="Manicure básica">Manicure básica</option>
-                        <option value="Pedicure">Pedicure</option>
-                        <option value="Otro">Otro (especificar)</option>
-                    </select>
-                </div>
-                
-                <div class="form-group hidden" id="otro-servicio-group">
-                    <label>✏️ Especificar servicio</label>
-                    <input type="text" id="otro-servicio" placeholder="Describe el servicio">
-                </div>
-                
-                <div class="form-group">
-                    <label>💰 Precio (múltiplo de $500)</label>
-                    <input type="number" id="precio" placeholder="Ej: 2500" step="500">
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="tiene-sena" onchange="toggleSena()">
-                    <label for="tiene-sena" style="margin: 0;">💵 ¿Tiene seña pagada?</label>
-                </div>
-                
-                <div id="sena-group" class="hidden">
-                    <div class="form-group">
-                        <label>Monto de la seña ($500 en $500)</label>
-                        <input type="number" id="monto-sena" placeholder="Ej: 500" step="500">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>👤 ¿Quién pagó la seña?</label>
-                        <input type="text" id="quien-pago" placeholder="Nombre de quien pagó">
-                    </div>
-                </div>
-                
-                <button class="btn btn-primary" onclick="guardarTurno()">
-                    💾 GUARDAR TURNO
+                <h2 class="welcome-title">¡Bienvenida! 💅</h2>
+                <p class="welcome-text">
+                    Reservá tu turno de forma fácil y rápida.<br>
+                    Seña de $5.000 para confirmar tu lugar.
+                </p>
+                <button class="btn btn-primary" onclick="mostrarReserva()">
+                    📅 Reservar Turno
+                </button>
+                <button class="btn btn-secondary" onclick="mostrarLoginAdmin()">
+                    🔐 Soy Admin
                 </button>
             </div>
         </div>
-        
-        <!-- Sección Turnos -->
-        <div id="section-turnos" class="section">
-            <div class="resumen">
+
+        <!-- LOGIN ADMIN -->
+        <div id="pantalla-login" class="section">
+            <div class="card">
+                <button class="back-btn" onclick="volverInicio()">← Volver</button>
+                <h2 class="welcome-title">Acceso Admin</h2>
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="admin-user" placeholder="admin">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="admin-pass" placeholder="••••">
+                </div>
+                <button class="btn btn-primary" onclick="loginAdmin()">
+                    Ingresar
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL ADMIN -->
+        <div id="pantalla-admin" class="section">
+            <div class="card">
+                <button class="back-btn" onclick="logoutAdmin()">← Cerrar sesión</button>
+                <h2 class="welcome-title">Panel de Administración</h2>
+            </div>
+
+            <div class="resumen-admin">
                 <div class="resumen-grid">
                     <div class="resumen-item">
-                        <h3 id="resumen-total">0</h3>
+                        <h3 id="admin-total">0</h3>
                         <p>Turnos</p>
                     </div>
                     <div class="resumen-item">
-                        <h3 id="resumen-precios">$0</h3>
-                        <p>Precios</p>
+                        <h3 id="admin-pendientes">0</h3>
+                        <p>Pendientes</p>
                     </div>
                     <div class="resumen-item">
-                        <h3 id="resumen-senas">$0</h3>
+                        <h3 id="admin-senas">$0</h3>
                         <p>Señas</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="filtros">
-                <button class="filtro-btn active" onclick="filtrarTurnos('Todos')">Todos</button>
-                <button class="filtro-btn" onclick="filtrarTurnos('Lunes')">Lun</button>
-                <button class="filtro-btn" onclick="filtrarTurnos('Martes')">Mar</button>
-                <button class="filtro-btn" onclick="filtrarTurnos('Miércoles')">Mié</button>
-                <button class="filtro-btn" onclick="filtrarTurnos('Jueves')">Jue</button>
-                <button class="filtro-btn" onclick="filtrarTurnos('Viernes')">Vie</button>
-                <button class="filtro-btn" onclick="filtrarTurnos('Sábado')">Sáb</button>
+
+            <div class="nav-admin">
+                <button class="nav-tab active" onclick="mostrarTabAdmin('turnos')">Turnos</button>
+                <button class="nav-tab" onclick="mostrarTabAdmin('config')">Config</button>
             </div>
-            
-            <div id="lista-turnos"></div>
-        </div>
-        
-        <!-- Sección Buscar -->
-        <div id="section-buscar" class="section">
-            <div class="card">
-                <div class="search-box">
-                    <input type="text" id="buscar-input" placeholder="Nombre del cliente...">
-                    <button class="btn btn-secondary" onclick="buscarTurnos()" style="width: auto; padding: 14px 20px;">
-                        🔍
+
+            <div id="admin-tab-turnos">
+                <div class="filtros">
+                    <button class="filtro-btn active" onclick="filtrarAdmin('todos')">Todos</button>
+                    <button class="filtro-btn" onclick="filtrarAdmin('pendiente')">Pendientes</button>
+                    <button class="filtro-btn" onclick="filtrarAdmin('pagado')">Pagados</button>
+                </div>
+                <div id="lista-admin-turnos"></div>
+            </div>
+
+            <div id="admin-tab-config" class="hidden">
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">Configuración de Pagos</h3>
+                    <div class="alias-box">
+                        <div class="alias-label">Tu alias de Mercado Pago</div>
+                        <div class="alias-value" id="config-alias">Ailuaristule</div>
+                        <div class="alias-nombre">Ailen Nicole Aristule</div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="volverInicio()">
+                        Volver al inicio
                     </button>
                 </div>
-                <div id="resultados-busqueda"></div>
             </div>
-            
+        </div>
+
+        <!-- RESERVA PASO 1: DATOS -->
+        <div id="reserva-paso1" class="section">
             <div class="card">
-                <h3 style="margin-bottom: 15px; color: #333;">❌ Cancelar Turno</h3>
-                <div class="form-group">
-                    <label>ID del turno a cancelar</label>
-                    <input type="number" id="cancelar-id" placeholder="Número de ID">
+                <button class="back-btn" onclick="volverInicio()">← Cancelar</button>
+                
+                <div class="step-indicator">
+                    <div class="step active"></div>
+                    <div class="step"></div>
+                    <div class="step"></div>
+                    <div class="step"></div>
                 </div>
-                <button class="btn btn-danger" onclick="mostrarModalCancelar()">
-                    CANCELAR TURNO
+
+                <h2 class="welcome-title">Tus datos</h2>
+                
+                <div class="form-group">
+                    <label>👤 Nombre completo</label>
+                    <input type="text" id="reserva-nombre" placeholder="Ej: María González">
+                </div>
+                
+                <div class="form-group">
+                    <label>📱 Teléfono (WhatsApp)</label>
+                    <input type="tel" id="reserva-telefono" placeholder="Ej: 11 1234-5678">
+                </div>
+                
+                <button class="btn btn-primary" onclick="irPaso2()">
+                    Continuar →
+                </button>
+            </div>
+        </div>
+
+        <!-- RESERVA PASO 2: SERVICIO -->
+        <div id="reserva-paso2" class="section">
+            <div class="card">
+                <button class="back-btn" onclick="volverPaso1()">← Volver</button>
+                
+                <div class="step-indicator">
+                    <div class="step completed"></div>
+                    <div class="step active"></div>
+                    <div class="step"></div>
+                    <div class="step"></div>
+                </div>
+
+                <h2 class="welcome-title">Seleccioná el servicio</h2>
+                
+                <div class="servicio-card" onclick="seleccionarServicio('Soft Gel', 20000)">
+                    <div class="servicio-nombre">Soft Gel</div>
+                    <div class="servicio-precio">$20.000</div>
+                </div>
+                
+                <div class="servicio-card" onclick="seleccionarServicio('Manicura Rusa', 10000)">
+                    <div class="servicio-nombre">Manicura Rusa</div>
+                    <div class="servicio-precio">$10.000</div>
+                </div>
+                
+                <div class="servicio-card" onclick="seleccionarServicio('Semi Permanente', 14000)">
+                    <div class="servicio-nombre">Semi Permanente</div>
+                    <div class="servicio-precio">$14.000</div>
+                </div>
+                
+                <div class="servicio-card" onclick="seleccionarServicio('Retirado', 4000)">
+                    <div class="servicio-nombre">Retirado</div>
+                    <div class="servicio-precio">$4.000</div>
+                </div>
+                
+                <div class="servicio-card" onclick="seleccionarServicio('Esculpidas en Poligel', 25000)">
+                    <div class="servicio-nombre">Esculpidas en Poligel</div>
+                    <div class="servicio-precio">$25.000</div>
+                </div>
+                
+                <div class="servicio-card" onclick="seleccionarServicio('Kapping Gel', 18000)">
+                    <div class="servicio-nombre">Kapping Gel</div>
+                    <div class="servicio-precio">$18.000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESERVA PASO 3: DÍA Y HORA -->
+        <div id="reserva-paso3" class="section">
+            <div class="card">
+                <button class="back-btn" onclick="volverPaso2()">← Volver</button>
+                
+                <div class="step-indicator">
+                    <div class="step completed"></div>
+                    <div class="step completed"></div>
+                    <div class="step active"></div>
+                    <div class="step"></div>
+                </div>
+
+                <h2 class="welcome-title">Seleccioná el día</h2>
+                <div class="dias-grid" id="dias-container"></div>
+                
+                <div id="horarios-section" class="hidden">
+                    <h3 style="margin-top: 25px; margin-bottom: 15px;">Seleccioná la hora</h3>
+                    <div class="horarios-grid" id="horarios-container"></div>
+                </div>
+                
+                <button class="btn btn-primary" id="btn-continuar-paso3" onclick="irPaso4()" disabled>
+                    Continuar →
+                </button>
+            </div>
+        </div>
+
+        <!-- RESERVA PASO 4: PAGO -->
+        <div id="reserva-paso4" class="section">
+            <div class="card">
+                <button class="back-btn" onclick="volverPaso3()">← Volver</button>
+                
+                <div class="step-indicator">
+                    <div class="step completed"></div>
+                    <div class="step completed"></div>
+                    <div class="step completed"></div>
+                    <div class="step active"></div>
+                </div>
+
+                <h2 class="welcome-title">Confirmar y pagar seña</h2>
+                
+                <div class="resumen-pago">
+                    <div class="resumen-item">
+                        <span>Servicio:</span>
+                        <span id="resumen-servicio">-</span>
+                    </div>
+                    <div class="resumen-item">
+                        <span>Precio total:</span>
+                        <span id="resumen-precio">-</span>
+                    </div>
+                    <div class="resumen-item">
+                        <span>Día y hora:</span>
+                        <span id="resumen-fecha">-</span>
+                    </div>
+                    <div class="resumen-item">
+                        <span class="resumen-total">Seña a pagar:</span>
+                        <span class="resumen-total">$5.000</span>
+                    </div>
+                </div>
+                
+                <div class="alias-box">
+                    <div class="alias-label">Enviar seña a este alias:</div>
+                    <div class="alias-value" onclick="copiarAlias()">Ailuaristule</div>
+                    <div class="alias-nombre">Ailen Nicole Aristule</div>
+                    <p style="margin-top: 10px; font-size: 0.85rem; color: #856404;">
+                        Tocá el alias para copiarlo
+                    </p>
+                </div>
+                
+                <p style="text-align: center; margin-bottom: 15px; color: #666;">
+                    ¿Ya realizaste el pago?
+                </p>
+                
+                <button class="btn btn-mercadopago" onclick="abrirMercadoPago()">
+                    📲 Abrir Mercado Pago
+                </button>
+                
+                <button class="btn btn-uala" onclick="abrirUala()">
+                    💳 Abrir Ualá
+                </button>
+                
+                <button class="btn btn-success" onclick="confirmarReserva()">
+                    ✅ Ya pagué, confirmar turno
+                </button>
+                
+                <p style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: #999;">
+                    Tu turno quedará pendiente hasta confirmar el pago
+                </p>
+            </div>
+        </div>
+
+        <!-- CONFIRMACIÓN FINAL -->
+        <div id="reserva-confirmada" class="section">
+            <div class="card">
+                <div class="confirmacion-box">
+                    <div class="confirmacion-icon">🎉</div>
+                    <div class="confirmacion-title">¡Turno reservado!</div>
+                    <div class="confirmacion-text" id="confirmacion-detalles">
+                        Te espero para tu servicio
+                    </div>
+                </div>
+                
+                <div class="resumen-pago">
+                    <p><strong>Recordá:</strong></p>
+                    <p style="margin-top: 10px;">• Llevar el comprobante de pago</p>
+                    <p>• La seña se descuenta del total</p>
+                    <p>• Cancelaciones con 24hs de anticipación</p>
+                </div>
+                
+                <button class="btn btn-primary" onclick="volverInicio()">
+                    Volver al inicio
                 </button>
             </div>
         </div>
     </div>
-    
-    <!-- Modal Confirmación -->
-    <div class="modal" id="modal-confirmar">
-        <div class="modal-content">
-            <div class="modal-title">¿Cancelar turno?</div>
-            <div class="modal-text" id="modal-texto"></div>
-            <div class="modal-buttons">
-                <button class="btn btn-secondary" onclick="cerrarModal()">No</button>
-                <button class="btn btn-danger" onclick="confirmarCancelar()">Sí, cancelar</button>
-            </div>
-        </div>
-    </div>
-    
+
     <!-- Toast -->
     <div class="toast" id="toast"></div>
-    
+
     <script>
         // Configuración
         const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         const HORARIOS = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30',
                          '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30'];
+        const ALIAS_MP = 'Ailuaristule';
+        const NOMBRE_TITULAR = 'Ailen Nicole Aristule';
+        const SENA = 5000;
         
-        let turnos = JSON.parse(localStorage.getItem('turnos')) || [];
-        let filtroActual = 'Todos';
-        let idCancelar = null;
-        
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', function() {
-            cargarSelectDias();
-            actualizarSelectHoras();
-        });
+        // Datos
+        let turnos = JSON.parse(localStorage.getItem('turnosAilen')) || [];
+        let reservaActual = {};
+        let filtroAdmin = 'todos';
         
         // Navegación
-        function showSection(section) {
+        function showSection(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+        
+        function mostrarReserva() {
+            reservaActual = {};
+            showSection('reserva-paso1');
+        }
+        
+        function mostrarLoginAdmin() {
+            showSection('pantalla-login');
+        }
+        
+        function volverInicio() {
+            showSection('pantalla-inicio');
+        }
+        
+        // Login Admin
+        function loginAdmin() {
+            const user = document.getElementById('admin-user').value;
+            const pass = document.getElementById('admin-pass').value;
             
-            document.getElementById('section-' + section).classList.add('active');
-            event.target.classList.add('active');
-            
-            if (section === 'turnos') {
-                renderizarTurnos();
+            if (user === 'admin' && pass === 'admin') {
+                showSection('pantalla-admin');
+                renderizarAdminTurnos();
+                actualizarResumenAdmin();
+                document.getElementById('admin-user').value = '';
+                document.getElementById('admin-pass').value = '';
+            } else {
+                mostrarToast('❌ Usuario o contraseña incorrectos');
             }
         }
         
-        // Cargar selects
-        function cargarSelectDias() {
-            const select = document.getElementById('dia');
-            DIAS.forEach(dia => {
-                const option = document.createElement('option');
-                option.value = dia;
-                option.textContent = dia;
-                select.appendChild(option);
-            });
-            select.addEventListener('change', actualizarSelectHoras);
+        function logoutAdmin() {
+            volverInicio();
         }
         
-        function actualizarSelectHoras() {
-            const dia = document.getElementById('dia').value;
-            const select = document.getElementById('hora');
-            select.innerHTML = '';
+        // Reserva Paso 1
+        function irPaso2() {
+            const nombre = document.getElementById('reserva-nombre').value.trim();
+            const telefono = document.getElementById('reserva-telefono').value.trim();
+            
+            if (!nombre) {
+                mostrarToast('❌ Ingresá tu nombre');
+                return;
+            }
+            if (!telefono) {
+                mostrarToast('❌ Ingresá tu teléfono');
+                return;
+            }
+            
+            reservaActual.nombre = nombre;
+            reservaActual.telefono = telefono;
+            showSection('reserva-paso2');
+        }
+        
+        function volverPaso1() {
+            showSection('reserva-paso1');
+        }
+        
+        // Reserva Paso 2
+        function seleccionarServicio(servicio, precio) {
+            reservaActual.servicio = servicio;
+            reservaActual.precio = precio;
+            
+            document.querySelectorAll('.servicio-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            
+            setTimeout(() => irPaso3(), 300);
+        }
+        
+        function volverPaso2() {
+            showSection('reserva-paso2');
+        }
+        
+        // Reserva Paso 3
+        function irPaso3() {
+            renderizarDias();
+            showSection('reserva-paso3');
+        }
+        
+        function renderizarDias() {
+            const container = document.getElementById('dias-container');
+            container.innerHTML = '';
+            
+            DIAS.forEach(dia => {
+                const btn = document.createElement('button');
+                btn.className = 'dia-btn';
+                btn.textContent = dia;
+                btn.onclick = () => seleccionarDia(dia, btn);
+                container.appendChild(btn);
+            });
+        }
+        
+        function seleccionarDia(dia, btnElement) {
+            reservaActual.dia = dia;
+            
+            document.querySelectorAll('.dia-btn').forEach(b => b.classList.remove('selected'));
+            btnElement.classList.add('selected');
+            
+            renderizarHorarios(dia);
+            document.getElementById('horarios-section').classList.remove('hidden');
+        }
+        
+        function renderizarHorarios(dia) {
+            const container = document.getElementById('horarios-container');
+            container.innerHTML = '';
             
             const ocupados = turnos.filter(t => t.dia === dia).map(t => t.hora);
-            const disponibles = HORARIOS.filter(h => !ocupados.includes(h));
             
-            if (disponibles.length === 0) {
-                const option = document.createElement('option');
-                option.textContent = 'No hay horarios disponibles';
-                select.appendChild(option);
-                return;
-            }
-            
-            disponibles.forEach(hora => {
-                const option = document.createElement('option');
-                option.value = hora;
-                option.textContent = hora;
-                select.appendChild(option);
+            HORARIOS.forEach(hora => {
+                const btn = document.createElement('button');
+                btn.className = 'horario-btn';
+                btn.textContent = hora;
+                
+                if (ocupados.includes(hora)) {
+                    btn.disabled = true;
+                } else {
+                    btn.onclick = () => seleccionarHora(hora, btn);
+                }
+                
+                container.appendChild(btn);
             });
         }
         
-        // Toggle campos
-        function toggleOtroServicio() {
-            const servicio = document.getElementById('servicio').value;
-            const group = document.getElementById('otro-servicio-group');
-            if (servicio === 'Otro') {
-                group.classList.remove('hidden');
-            } else {
-                group.classList.add('hidden');
-            }
+        function seleccionarHora(hora, btnElement) {
+            reservaActual.hora = hora;
+            
+            document.querySelectorAll('.horario-btn').forEach(b => b.classList.remove('selected'));
+            btnElement.classList.add('selected');
+            
+            document.getElementById('btn-continuar-paso3').disabled = false;
         }
         
-        function toggleSena() {
-            const checked = document.getElementById('tiene-sena').checked;
-            const group = document.getElementById('sena-group');
-            if (checked) {
-                group.classList.remove('hidden');
-            } else {
-                group.classList.add('hidden');
-            }
+        function irPaso4() {
+            document.getElementById('resumen-servicio').textContent = reservaActual.servicio;
+            document.getElementById('resumen-precio').textContent = '$' + reservaActual.precio.toLocaleString();
+            document.getElementById('resumen-fecha').textContent = reservaActual.dia + ' a las ' + reservaActual.hora;
+            showSection('reserva-paso4');
         }
         
-        // Validaciones
-        function validarPrecio(precio) {
-            precio = parseInt(precio);
-            if (isNaN(precio) || precio <= 0) return { valido: false, error: 'El precio debe ser mayor a 0' };
-            if (precio % 500 !== 0) return { valido: false, error: 'El precio debe ser múltiplo de $500' };
-            return { valido: true, valor: precio };
+        function volverPaso3() {
+            showSection('reserva-paso3');
         }
         
-        function validarSena(sena, precio) {
-            sena = parseInt(sena) || 0;
-            if (sena === 0) return { valido: true, valor: 0 };
-            if (sena % 500 !== 0) return { valido: false, error: 'La seña debe ser múltiplo de $500' };
-            if (sena > precio) return { valido: false, error: 'La seña no puede ser mayor al precio' };
-            return { valido: true, valor: sena };
+        // Pago
+        function copiarAlias() {
+            navigator.clipboard.writeText(ALIAS_MP).then(() => {
+                mostrarToast('✅ Alias copiado: ' + ALIAS_MP);
+            });
         }
         
-        // Guardar turno
-        function guardarTurno() {
-            const cliente = document.getElementById('cliente').value.trim();
-            if (!cliente) {
-                mostrarToast('❌ Ingresa el nombre del cliente');
-                return;
-            }
-            
-            const dia = document.getElementById('dia').value;
-            const hora = document.getElementById('hora').value;
-            
-            if (hora.includes('No hay')) {
-                mostrarToast('❌ No hay horarios disponibles');
-                return;
-            }
-            
-            let servicio = document.getElementById('servicio').value;
-            if (servicio === 'Otro') {
-                servicio = document.getElementById('otro-servicio').value.trim();
-                if (!servicio) {
-                    mostrarToast('❌ Especifica el servicio');
-                    return;
-                }
-            }
-            
-            const valPrecio = validarPrecio(document.getElementById('precio').value);
-            if (!valPrecio.valido) {
-                mostrarToast('❌ ' + valPrecio.error);
-                return;
-            }
-            const precio = valPrecio.valor;
-            
-            let sena = 0;
-            let quienPago = '';
-            
-            if (document.getElementById('tiene-sena').checked) {
-                const valSena = validarSena(document.getElementById('monto-sena').value, precio);
-                if (!valSena.valido) {
-                    mostrarToast('❌ ' + valSena.error);
-                    return;
-                }
-                sena = valSena.valor;
-                quienPago = document.getElementById('quien-pago').value.trim() || cliente;
-            }
-            
+        function abrirMercadoPago() {
+            const url = `https://www.mercadopago.com.ar/p2p/transferencias/?alias=${ALIAS_MP}&amount=${SENA}`;
+            window.open(url, '_blank');
+        }
+        
+        function abrirUala() {
+            mostrarToast('💳 Buscá el alias: ' + ALIAS_MP + ' en Ualá');
+            setTimeout(() => {
+                window.open('uala://', '_blank');
+            }, 1000);
+        }
+        
+        function confirmarReserva() {
             const turno = {
                 id: generarId(),
-                cliente,
-                dia,
-                hora,
-                servicio,
-                precio,
-                sena,
-                quienPago,
-                saldo: precio - sena,
+                cliente: reservaActual.nombre,
+                telefono: reservaActual.telefono,
+                servicio: reservaActual.servicio,
+                precio: reservaActual.precio,
+                dia: reservaActual.dia,
+                hora: reservaActual.hora,
+                sena: SENA,
+                estado: 'pendiente',
                 fechaCreacion: new Date().toISOString()
             };
             
             turnos.push(turno);
-            localStorage.setItem('turnos', JSON.stringify(turnos));
+            localStorage.setItem('turnosAilen', JSON.stringify(turnos));
+            
+            document.getElementById('confirmacion-detalles').innerHTML = `
+                <strong>${turno.servicio}</strong><br>
+                ${turno.dia} a las ${turno.hora}<br>
+                Precio: $${turno.precio.toLocaleString()}
+            `;
+            
+            showSection('reserva-confirmada');
             
             // Limpiar formulario
-            document.getElementById('cliente').value = '';
-            document.getElementById('precio').value = '';
-            document.getElementById('otro-servicio').value = '';
-            document.getElementById('monto-sena').value = '';
-            document.getElementById('quien-pago').value = '';
-            document.getElementById('tiene-sena').checked = false;
-            toggleSena();
-            
-            actualizarSelectHoras();
-            mostrarToast('✅ Turno guardado exitosamente');
+            document.getElementById('reserva-nombre').value = '';
+            document.getElementById('reserva-telefono').value = '';
+            document.querySelectorAll('.servicio-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.dia-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.horario-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('horarios-section').classList.add('hidden');
+            document.getElementById('btn-continuar-paso3').disabled = true;
         }
         
         function generarId() {
@@ -711,154 +1013,102 @@
             return Math.max(...turnos.map(t => t.id)) + 1;
         }
         
-        // Renderizar turnos
-        function renderizarTurnos() {
-            const container = document.getElementById('lista-turnos');
-            let turnosMostrar = turnos;
+        // Admin
+        function mostrarTabAdmin(tab) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
             
-            if (filtroActual !== 'Todos') {
-                turnosMostrar = turnos.filter(t => t.dia === filtroActual);
+            document.getElementById('admin-tab-turnos').classList.toggle('hidden', tab !== 'turnos');
+            document.getElementById('admin-tab-config').classList.toggle('hidden', tab !== 'config');
+        }
+        
+        function filtrarAdmin(filtro) {
+            filtroAdmin = filtro;
+            document.querySelectorAll('#admin-tab-turnos .filtro-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderizarAdminTurnos();
+        }
+        
+        function renderizarAdminTurnos() {
+            const container = document.getElementById('lista-admin-turnos');
+            let mostrar = turnos;
+            
+            if (filtroAdmin !== 'todos') {
+                mostrar = turnos.filter(t => t.estado === filtroAdmin);
             }
             
             // Ordenar
             const ordenDias = { 'Lunes': 0, 'Martes': 1, 'Miércoles': 2, 'Jueves': 3, 'Viernes': 4, 'Sábado': 5 };
-            turnosMostrar.sort((a, b) => {
+            mostrar.sort((a, b) => {
                 if (ordenDias[a.dia] !== ordenDias[b.dia]) {
                     return ordenDias[a.dia] - ordenDias[b.dia];
                 }
                 return a.hora.localeCompare(b.hora);
             });
             
-            // Actualizar resumen
-            const totalPrecios = turnosMostrar.reduce((sum, t) => sum + t.precio, 0);
-            const totalSenas = turnosMostrar.reduce((sum, t) => sum + t.sena, 0);
-            
-            document.getElementById('resumen-total').textContent = turnosMostrar.length;
-            document.getElementById('resumen-precios').textContent = '$' + totalPrecios.toLocaleString();
-            document.getElementById('resumen-senas').textContent = '$' + totalSenas.toLocaleString();
-            
-            // Renderizar
-            if (turnosMostrar.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <p>No hay turnos ${filtroActual !== 'Todos' ? 'para ' + filtroActual : ''}</p>
-                    </div>
-                `;
+            if (mostrar.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No hay turnos</p>';
                 return;
             }
             
-            container.innerHTML = turnosMostrar.map(t => `
+            container.innerHTML = mostrar.map(t => `
                 <div class="turno-card">
                     <div class="turno-header">
                         <span class="turno-cliente">${t.cliente}</span>
-                        <span class="turno-id">#${t.id}</span>
+                        <span class="turno-estado estado-${t.estado}">${t.estado.toUpperCase()}</span>
                     </div>
-                    <div class="turno-info">📅 ${t.dia} a las ${t.hora}</div>
-                    <div class="turno-info">💅 ${t.servicio}</div>
-                    ${t.sena > 0 ? `<div class="turno-info">👤 Seña pagada por: ${t.quienPago}</div>` : ''}
-                    <div class="turno-precio">
-                        <div class="precio-item">
-                            <div class="precio-label">Precio</div>
-                            <div class="precio-valor precio-total">$${t.precio.toLocaleString()}</div>
-                        </div>
-                        <div class="precio-item">
-                            <div class="precio-label">Seña</div>
-                            <div class="precio-valor precio-sena">$${t.sena.toLocaleString()}</div>
-                        </div>
-                        <div class="precio-item">
-                            <div class="precio-label">Saldo</div>
-                            <div class="precio-valor precio-saldo">$${t.saldo.toLocaleString()}</div>
-                        </div>
+                    <div style="color: #666; font-size: 0.9rem; margin-bottom: 5px;">
+                        📱 ${t.telefono}
+                    </div>
+                    <div style="color: #666; margin-bottom: 5px;">
+                        📅 ${t.dia} a las ${t.hora}
+                    </div>
+                    <div style="color: #666; margin-bottom: 10px;">
+                        💅 ${t.servicio} - $${t.precio.toLocaleString()}
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        ${t.estado === 'pendiente' ? `
+                            <button class="btn btn-success" style="flex: 1; padding: 10px; font-size: 0.9rem;" 
+                                onclick="marcarPagado(${t.id})">✓ Marcar pagado</button>
+                        ` : ''}
+                        <button class="btn btn-danger" style="flex: 1; padding: 10px; font-size: 0.9rem;" 
+                            onclick="eliminarTurno(${t.id})">🗑 Eliminar</button>
                     </div>
                 </div>
             `).join('');
         }
         
-        function filtrarTurnos(dia) {
-            filtroActual = dia;
-            document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            renderizarTurnos();
+        function actualizarResumenAdmin() {
+            const pendientes = turnos.filter(t => t.estado === 'pendiente').length;
+            const senas = turnos.filter(t => t.estado === 'pagado').reduce((sum, t) => sum + t.sena, 0);
+            
+            document.getElementById('admin-total').textContent = turnos.length;
+            document.getElementById('admin-pendientes').textContent = pendientes;
+            document.getElementById('admin-senas').textContent = '$' + senas.toLocaleString();
         }
         
-        // Buscar
-        function buscarTurnos() {
-            const busqueda = document.getElementById('buscar-input').value.trim().toLowerCase();
-            const container = document.getElementById('resultados-busqueda');
-            
-            if (!busqueda) {
-                container.innerHTML = '';
-                return;
-            }
-            
-            const resultados = turnos.filter(t => t.cliente.toLowerCase().includes(busqueda));
-            
-            if (resultados.length === 0) {
-                container.innerHTML = '<p style="color: #999; text-align: center;">No se encontraron resultados</p>';
-                return;
-            }
-            
-            container.innerHTML = resultados.map(t => `
-                <div class="turno-card">
-                    <div class="turno-header">
-                        <span class="turno-cliente">${t.cliente}</span>
-                        <span class="turno-id">#${t.id}</span>
-                    </div>
-                    <div class="turno-info">📅 ${t.dia} a las ${t.hora}</div>
-                    <div class="turno-info">💅 ${t.servicio}</div>
-                    <div class="turno-precio">
-                        <div class="precio-item">
-                            <div class="precio-label">Precio</div>
-                            <div class="precio-valor precio-total">$${t.precio.toLocaleString()}</div>
-                        </div>
-                        <div class="precio-item">
-                            <div class="precio-label">Seña</div>
-                            <div class="precio-valor precio-sena">$${t.sena.toLocaleString()}</div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        // Cancelar
-        function mostrarModalCancelar() {
-            const id = parseInt(document.getElementById('cancelar-id').value);
-            if (!id) {
-                mostrarToast('❌ Ingresa un ID válido');
-                return;
-            }
-            
+        function marcarPagado(id) {
             const turno = turnos.find(t => t.id === id);
-            if (!turno) {
-                mostrarToast('❌ No se encontró turno con ese ID');
-                return;
+            if (turno) {
+                turno.estado = 'pagado';
+                localStorage.setItem('turnosAilen', JSON.stringify(turnos));
+                renderizarAdminTurnos();
+                actualizarResumenAdmin();
+                mostrarToast('✅ Turno marcado como pagado');
             }
-            
-            idCancelar = id;
-            document.getElementById('modal-texto').textContent = 
-                `¿Cancelar el turno de ${turno.cliente} el ${turno.dia} a las ${turno.hora}?`;
-            document.getElementById('modal-confirmar').classList.add('active');
         }
         
-        function cerrarModal() {
-            document.getElementById('modal-confirmar').classList.remove('active');
-            idCancelar = null;
+        function eliminarTurno(id) {
+            if (confirm('¿Eliminar este turno?')) {
+                turnos = turnos.filter(t => t.id !== id);
+                localStorage.setItem('turnosAilen', JSON.stringify(turnos));
+                renderizarAdminTurnos();
+                actualizarResumenAdmin();
+                mostrarToast('🗑 Turno eliminado');
+            }
         }
         
-        function confirmarCancelar() {
-            if (!idCancelar) return;
-            
-            turnos = turnos.filter(t => t.id !== idCancelar);
-            localStorage.setItem('turnos', JSON.stringify(turnos));
-            
-            document.getElementById('cancelar-id').value = '';
-            cerrarModal();
-            mostrarToast('✅ Turno cancelado');
-            actualizarSelectHoras();
-        }
-        
-        // Toast
+        // Utilidades
         function mostrarToast(mensaje) {
             const toast = document.getElementById('toast');
             toast.textContent = mensaje;
